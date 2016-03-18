@@ -1,0 +1,2 @@
+export const SUBMIT_CASHBOX = "SUBMIT_CASHBOX";
+export const FETCH_SUCCEED = "FETCH_SUCCEED";
