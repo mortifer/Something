@@ -1,27 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Route, Router, IndexRoute, browserHistory, Redirect} from "react-router";
+
+import { Router } from "react-router";
 import { Provider } from "react-redux";
+import { browserHistory } from "react-router";
 
-import Layout from "./Layout";
-import Stat from "./Stat";
-import Report from "./Report";
-import Cashbox from "./Cashbox";
+import routes from "./routes";
+import storeConfigurator from "./configureStore";
 
-import configureStore from "./configureStore";
+const store = storeConfigurator();
 
 ReactDOM.render(
-    <Provider store={configureStore()}>
-        <Router history={browserHistory}>
-            <Route path="/" component={Layout}>
-                <IndexRoute component={Report} />
-                <Route path="stat" component={Stat} />
-                <Route path="cashbox" component={Cashbox} />
-                <Redirect from="*" to="/" />
-            </Route>
-        </Router>
-    </Provider>,
-    document.getElementById('root')
+    <Provider store={store}>
+        <Router history={browserHistory}>{routes}</Router>
+    </Provider>, document.getElementById("root")
 );
 
 // <Route path="cashbox" component={Cashbox}>

@@ -1,6 +1,5 @@
-import cashboxAppReducer from "./Cashbox/CashboxApplication/reducer"
-import cashReducer from "./Cashbox/reducer"
+import { reducer as cashReducer } from "./Cashbox"
 
 export default (state = {}, action) => {
-    return cashReducer(cashboxAppReducer(state, action), action);
+    return cashReducer(state, action);
 };

@@ -4,7 +4,6 @@ import { put } from "redux-saga/effects";
 import * as actionTypes from "./actionTypes";
 import { DATE_CHANGED } from "./CashboxApplication/actionTypes"
 
-
 export function* initAppFromLocalStorage() {
     const input = localStorage.getItem("input") || 11;
     const date = localStorage.getItem("date");

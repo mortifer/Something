@@ -1,8 +1,8 @@
 import thunk from "redux-thunk";
 import { applyMiddleware, compose, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
-import sagas from "./allSagas";
 
+import sagas from "./rootSaga";
 import rootReducer from "./rootReducer";
 
 const includeDevTools = () => {
@@ -22,8 +22,8 @@ export default (initialState = {}) => {
     const store = createStoreWithMiddleware(rootReducer, initialState);
 
     if (module.hot) {
-        module.hot.accept('./rootReducer', () =>
-            store.replaceReducer(require('./rootReducer').default)
+        module.hot.accept("./rootReducer", () =>
+            store.replaceReducer(require("./rootReducer").default)
         );
     }
 
