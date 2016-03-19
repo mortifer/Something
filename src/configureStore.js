@@ -18,14 +18,4 @@ const createStoreWithMiddleware = compose(
     includeDevTools()
 )(createStore);
 
-export default (initialState = {}) => {
-    const store = createStoreWithMiddleware(rootReducer, initialState);
-
-    if (module.hot) {
-        module.hot.accept("./rootReducer", () =>
-            store.replaceReducer(require("./rootReducer").default)
-        );
-    }
-
-    return store;
-};
+export default (initialState = {}) => createStoreWithMiddleware(rootReducer, initialState);

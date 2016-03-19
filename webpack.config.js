@@ -39,11 +39,6 @@ const baseConfig = {
             },
 
             {
-                test: /\.(css|less)$/,
-                loader: ExtractTextPlugin.extract("style-loader", "css?sourceMap&localIdentName=[name]-[local]-[hash:base64:8]!postcss-loader?sourceMap")
-            },
-
-            {
                 test: /\.less$/,
                 loader: "less?sourceMap"
             },
@@ -55,7 +50,7 @@ const baseConfig = {
 
             {
                 test: /\.woff2?$/,
-                loader: "url-loader?prefix=font/&limit=5000&mimetype=application/font-woff"
+                loader: "url-loader?prefix=font/&limit=10000&mimetype=application/font-woff"
             },
 
             {
@@ -94,15 +89,29 @@ const devConfig = {
     cache: true,
     debug: true,
     devtool: "#inline-source-map",
+    module: {
+        loaders: [
+            {
+                test: /\.(css|less)$/,
+                exclude: [ path.join(__dirname, "src") ],
+                loader: ExtractTextPlugin.extract("style-loader", "css?sourceMap&localIdentName=[name]-[local]-[hash:base64:8]!postcss-loader?sourceMap")
+            },
+            {
+                test: /\.(css|less)$/,
+                include: [ path.join(__dirname, "src") ],
+                loaders: ["style-loader", "css?sourceMap&localIdentName=[name]-[local]-[hash:base64:8]!postcss-loader?sourceMap"]
+            }
+        ]
+    },
     entry: {
         index: [
-            "webpack-dev-server/client?http://localhost:3000",
-            "webpack/hot/only-dev-server",
+            "webpack-hot-middleware/client",
             "./index.js"
         ]
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin(),
         new WebpackNotifierPlugin({ title: "Webpack" })
     ]
 };
@@ -113,6 +122,14 @@ const productionConfig = {
     devtool: null,
     entry: {
         index: ["./index.js"]
+    },
+    module: {
+        loaders: [
+            {
+                test: /\.(css|less)$/,
+                loader: ExtractTextPlugin.extract("style-loader", "css?sourceMap&localIdentName=[name]-[local]-[hash:base64:8]!postcss-loader?sourceMap")
+            }
+        ]
     },
     plugins: [
         new webpack.optimize.DedupePlugin(),

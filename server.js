@@ -1,17 +1,36 @@
-var webpack = require("webpack");
-var WebpackDevServer = require("webpack-dev-server");
-var config = require("./webpack.config.js");
+const path = require("path");
+const express = require("express");
+const webpack = require("webpack");
+const webpackDevMiddleware = require("webpack-dev-middleware");
+const webpackHotMiddleware = require("webpack-hot-middleware");
 
-new WebpackDevServer(webpack(config), {
+const config = require("./webpack.config.js");
+
+const app = express();
+const compiler = webpack(config);
+
+app.use(express.static(__dirname + "/dist"));
+
+app.use(webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath,
     hot: true,
-    historyApiFallback: true
-}).listen(3000, "localhost", function (err) {
-    /*eslint-disable no-console */
-    if (err) {
-        console.log(err);
-    }
+    historyApiFallback: true,
+    watch: true,
+    
+    stats: {
+        colors: true
+    },
 
-    console.log("Listening at localhost:3000");
-    /*eslint-enable no-console */
+    watchOptions: {
+        aggregateTimeout: 300,
+        poll: 1000
+    }
+}));
+
+app.use(webpackHotMiddleware(compiler));
+
+app.get("*", function response(req, res) {
+    res.sendFile(path.join(__dirname, "./index.html"));
 });
+
+app.listen(3000);

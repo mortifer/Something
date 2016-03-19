@@ -1,12 +1,13 @@
 import React from "react";
 import {Link, IndexLink} from "react-router";
+import css from "./layout.less";
 
 class Layout extends React.Component {
     render(){
         const { children } = this.props;
 
         return (
-            <div>
+            <div className={css.block}>
                 <IndexLink to="/" activeClassName="-active">
                     Сводка
                 </IndexLink>
