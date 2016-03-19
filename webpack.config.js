@@ -2,14 +2,14 @@ const path = require("path");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 
-const postcss = require("postcss");
 const autoprefixer = require("autoprefixer");
 const postcssImport = require("postcss-import");
 
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const WebpackNotifierPlugin = require("webpack-notifier");
 
-const inProduction = (process.argv || []).some(arg => ["-p", "--optimize-minimize", "--optimize-occurence-order"].indexOf(arg) !== -1);
+const nodeEnv = process.env.NODE_ENV || "development";
+const inProduction = nodeEnv === "production" || (process.argv || []).some(arg => ["-p", "--optimize-minimize", "--optimize-occurence-order"].indexOf(arg) !== -1);
 
 const baseConfig = {
     target: "web",
@@ -29,6 +29,15 @@ const baseConfig = {
         noParse: ["node_modules"],
 
         loaders: [
+            {
+                test: /\.jsx?$/,
+                include: [
+                    path.join(__dirname, "src"),
+                    /retail-ui/
+                ],
+                loaders: ["react-hot", "babel"]
+            },
+
             {
                 test: /\.(css|less)$/,
                 loader: ExtractTextPlugin.extract("style-loader", "css?sourceMap&localIdentName=[name]-[local]-[hash:base64:8]!postcss-loader?sourceMap")
@@ -53,12 +62,12 @@ const baseConfig = {
                 test: /\.eot/,
                 loader: "url-loader"
             }
-        ],
+        ]
     },
 
     resolve: {
         extensions: ["", ".js", ".jsx"],
-        modulesDirectories: [ "node_modules", __dirname ],
+        modulesDirectories: ["node_modules", __dirname],
         root: [__dirname],
         alias: {
             "ui": "retail-ui/components"
@@ -68,7 +77,7 @@ const baseConfig = {
     postcss: function (webpack) {
         return [
             postcssImport({addDependencyTo: webpack}),
-            autoprefixer({browsers: ["last 2 versions"]}),
+            autoprefixer({browsers: ["last 2 versions"]})
         ];
     },
 
@@ -78,7 +87,7 @@ const baseConfig = {
             minChunks: Infinity
         }),
         new ExtractTextPlugin("[name].css", { allChunks: true })
-    ],
+    ]
 };
 
 const devConfig = {
@@ -87,28 +96,15 @@ const devConfig = {
     devtool: "#inline-source-map",
     entry: {
         index: [
+            "webpack-dev-server/client?http://localhost:3000",
             "webpack/hot/only-dev-server",
-            "./index.js",
+            "./index.js"
         ]
-    },
-    module: {
-        loaders: [
-            {
-                test: /\.jsx?$/,
-                include: [
-                    path.join(__dirname, "src"),
-                    /retail-ui/
-                ],
-                loaders: ["react-hot", "babel"],
-            },
-        ],
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new WebpackNotifierPlugin({
-            title: "Webpack"
-        })
-    ],
+        new WebpackNotifierPlugin({ title: "Webpack" })
+    ]
 };
 
 const productionConfig = {
@@ -116,18 +112,7 @@ const productionConfig = {
     debug: false,
     devtool: null,
     entry: {
-        index: [
-            "./index.js",
-        ]
-    },
-    module: {
-        loaders: [
-            {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                loader: "babel",
-            },
-        ],
+        index: ["./index.js"]
     },
     plugins: [
         new webpack.optimize.DedupePlugin(),
@@ -144,7 +129,7 @@ const productionConfig = {
             }
         }),
         new webpack.DefinePlugin({
-            "process.env.NODE_ENV": JSON.stringify("production")
+            "process.env": { NODE_ENV: JSON.stringify(nodeEnv) }
         })
     ]
 };
