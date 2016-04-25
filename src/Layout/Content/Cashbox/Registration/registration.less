@@ -1,0 +1,71 @@
+.registration {
+    margin: 35px 0 0 0;
+    display: flex;
+
+    &_nav {
+        flex-shrink: 0;
+        width: 175px;
+        position: absolute;
+
+        &_item {
+            display: block;
+            line-height: 30px;
+            white-space: nowrap;
+            padding: 0 13px;
+            margin: 0 0 0 -13px;
+            left: 1px;
+            position: relative;
+            box-sizing: border-box;
+            border: solid 1px transparent;
+
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+
+            &.-active {
+               color: #404040;
+                border-color: #e3e3e3;
+                border-right-color: #ffffff;
+            }
+
+            &:first-child {
+                margin-top: 16px;
+            }
+        }
+
+        .registration.-sticked & {
+            position: fixed;
+            top: 50px;
+        }
+    }
+
+    &_content {
+        width: 100%;
+        padding: 20px 20px 55px 55px;
+        box-sizing: border-box;
+        border-left: solid 1px #e3e3e3;
+        margin: 0 0 0 175px;
+    }
+
+    &_block {
+        margin: 0 0 55px 0;
+
+        &_title {
+
+        }
+
+        &_row {
+            margin: 20px 0;
+            label {
+                display: inline-block;
+                width: 165px;
+            }
+        }
+    }
+
+    &_checkboxList {
+        &_item {
+            margin: 10px 0;
+        }
+    }
+
+}

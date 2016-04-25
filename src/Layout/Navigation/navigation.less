@@ -1,0 +1,61 @@
+.navigation {
+    flex-shrink: 0;
+    background: #daefb2;
+    width: 100px;
+    font-size: 16px;
+
+    &_list {
+        width: 100px;
+
+        .navigation.-sticked & {
+            position: fixed;
+            top: 50px;
+        }
+    }
+
+    &_item {
+        display: block;
+        height: 150px;
+        padding-top: 100px;
+        box-sizing: border-box;
+        text-align: center;
+        text-decoration: none;
+        position: relative;
+        color: #85ad36;
+
+        &:before {
+            content: '';
+            width: 100px;
+            height: 150px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: url("sprite.png") 0 0 no-repeat;
+
+            .-active& {
+                background-position-x: -100px;
+            }
+        }
+
+        &__report:before {
+            background-position-y: 0;
+        }
+
+        &__stat:before {
+            background-position-y: -150px;
+        }
+
+        &__cashbox:before {
+            background-position-y: -300px;
+        }
+
+        &__cashReceipts:before {
+            background-position-y: -450px;
+        }
+
+        &.-active {
+            background-color: #93ba47;
+            color: #ffffff;
+        }
+    }
+}

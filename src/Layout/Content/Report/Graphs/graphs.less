@@ -1,0 +1,69 @@
+.graphs {
+
+    &_title {
+        margin: 0 0 35px 0;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td {
+        border-bottom: solid 1px #dddddd;
+        text-align: right;
+        vertical-align: baseline;
+        line-height: 26px;
+        width:20%;
+        &:first-child {
+            text-align: left;
+            font-size: 14px;
+        }
+        &:nth-child(2n) {
+            width: 30%;
+        }
+    }
+
+    thead td {
+        color: #606060;
+        padding: 7px 0;
+    }
+
+    tbody td {
+        padding-top: 18px;
+        padding-bottom: 22px;
+        font-size: 25px;
+        div {
+            font-size: 21px;
+            font-weight: 300;
+        }
+        span {
+            font-size: 22px;
+            font-weight: 300;
+            color: #606060;
+        }
+    }
+
+    tbody tr:last-child td {
+        border: none;
+    }
+}
+
+.cols {
+    height: 200px;
+    display: flex;
+
+    &_col {
+        background-color: #ffdfaa;
+        background-clip: content-box;
+        box-sizing: border-box;
+        &:hover {
+            background-image: linear-gradient(to bottom, #ffd299, #ff9b1c);
+            cursor: pointer;
+        }
+    }
+
+    &__week &_col {
+        width: 100px;
+    }
+}
