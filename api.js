@@ -35,7 +35,20 @@ app.get('/getModel/Report/Graph/Table', function (req, res) {
     res.send(Table);    
 });
 
-app.get('/getModel/Report/Graph/Graph', function (req, res) {
+app.get('/getModel/Report/Tasks', function (req, res) {
+    res.send([
+        { text: "Продлить обслуживание у оператора фискальных данных", tillDate: new Date(2016, 3, 15) },
+        { text: "Перерегистрировать кассу «Павильон на Сурикова»", tillDate: new Date(2016, 3, 27) },
+    ]);    
+});
+
+app.get('/getModel/Report/Notifications', function (req, res) {
+    res.send([
+        { text: "Касса «№ 2 на 8 марта»: получена регистрационная карта" }
+    ]);    
+});
+
+app.get('/getModel/Report/Graph/Chart', function (req, res) {
     var Graph = {
         cols: [
             {

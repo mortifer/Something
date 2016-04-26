@@ -27,18 +27,32 @@ export default defineReducer(Map({ empty: true, data: undefined }))
         })        
         var task2 = yield fork(function* () {
             var data = yield promise(() => {
-                return axios.get('http://localhost.dev.kontur:3001/getModel/Report/Graph/Graph').then(response => response.data).catch(error => ({ error }));        
+                return axios.get('http://localhost.dev.kontur:3001/getModel/Report/Graph/Chart').then(response => response.data).catch(error => ({ error }));        
+            });
+            return data;
+        })
+        var task3 = yield fork(function* () {
+            var data = yield promise(() => {
+                return axios.get('http://localhost.dev.kontur:3001/getModel/Report/Tasks').then(response => response.data).catch(error => ({ error }));        
+            });
+            return data;
+        })
+        var task4 = yield fork(function* () {
+            var data = yield promise(() => {
+                return axios.get('http://localhost.dev.kontur:3001/getModel/Report/Notifications').then(response => response.data).catch(error => ({ error }));        
             });
             return data;
         })
         var data1 = yield join(task1);
         var data2 = yield join(task2);
+        var data3 = yield join(task3);
+        var data4 = yield join(task4);
 
-        if (data1.error || data2.error) {
+        if (data1.error || data2.error || data3.error || data4.error) {
             yield put({ type: DataRetrievingError, error: 'Some error' });
         }
         else {
-            yield put({ type: DataRetrieved, data: { graph: data2, table: data1 } });
+            yield put({ type: DataRetrieved, data: { graph: data2, table: data1, tasks: data3, notifications: data4 } });
             yield promise(() => delay(2000));
             yield put({ type: Refresh });
         }
