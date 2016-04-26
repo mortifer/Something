@@ -62,7 +62,7 @@ const baseConfig = {
 
     resolve: {
         extensions: ["", ".js", ".jsx"],
-        modulesDirectories: ["node_modules", __dirname],
+        modulesDirectories: ["node_modules", __dirname, "web_modules"],
         root: [__dirname],
         alias: {
             "ui": "retail-ui/components",

@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import { connect } from 'react-redux';
 
 import { Link, IndexLink } from "react-router";
 
@@ -64,29 +65,34 @@ const scrollHandle = (enable) => {
 class Registration extends React.Component {
 
     componentDidMount() {
-        hashNavigation();
-        scrollHandle(true);
+        //hashNavigation();
+        //scrollHandle(true);
     }
 
     componentDidUpdate(){
-        hashNavigation();
+        //hashNavigation();
     }
 
     componentWillUnmount() {
-        lightpageCollapse();
-        scrollHandle(false);
+        //lightpageCollapse();
+        //scrollHandle(false);
     }
 
     render() {
-        const model = AppModel.Content.Cashbox.Registration;
+
+        var { model, dispatch } = this.props;
+        if (!model)
+            return (<div>Loading...</div>)
+        var onChange = (d) => dispatch({ type: 'Change', data: d });
+
 
         function _handleSubmit() {
-            console.log(model);
+            dispatch({ type: 'StartPosting' })
             axios.post(
                 "http://mp04lr1z.dev.kontur:3001/setModel",
                 model
             ).then(function (response) {
-                console.log("ok");
+                dispatch({ type: 'EndPosting' })
             }).catch(function (response) {
                 console.log("huj");
             });
@@ -107,11 +113,8 @@ class Registration extends React.Component {
                             <Link to="/cashbox/registration#fiscal-storage" className="registration_nav_item">Фискальный накопитель</Link>
                         </div>
                         <div className="registration_content">
-                            <CashboxApplication model={model.CashboxApplication} />
-                            <CashboxOwner model={model.CashboxOwner} />
-                            <CashboxDevice model={model.CashboxDevice} />
-                            <FiscalStorage model={model.FiscalStorage} />
-                            <Button use="success" size="large" onClick={_handleSubmit}>Отправить заявление</Button>
+                            <CashboxApplication model={model.CashboxApplication} onChange={d => onChange({ CashboxApplication: d })} />
+                            <Button use="success" size="large" onClick={() => dispatch({ type: 'StartPosting' })}>Отправить заявление</Button>
                         </div>
                     </div>
                 </div>
@@ -119,6 +122,12 @@ class Registration extends React.Component {
         );
     }
 }
+// <CashboxOwner model={model.CashboxOwner} />
+// <CashboxDevice model={model.CashboxDevice} />
+// <FiscalStorage model={model.FiscalStorage} />
 
-export default Registration;
+export default connect(
+    state => ({ model: state.get('Registration') && state.get('Registration').toJS() })
+)(Registration);
+
 
