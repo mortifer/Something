@@ -39,12 +39,6 @@ const baseConfig = {
             },
 
             {
-                test: /\.jsx?$/,
-                include: /reelm/,
-                loaders: ["babel"]
-            },
-
-            {
                 test: /\.less$/,
                 loader: "less?sourceMap"
             },
@@ -72,8 +66,7 @@ const baseConfig = {
         root: [__dirname],
         alias: {
             "ui": "retail-ui/components",
-            "GSAPScrollToPlugin": "gsap/src/uncompressed/plugins/ScrollToPlugin",
-            'reelm': 'C:/workspace/local_modules/reelm/src'
+            "GSAPScrollToPlugin": "gsap/src/uncompressed/plugins/ScrollToPlugin"
         }
     },
 
