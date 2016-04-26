@@ -15,7 +15,7 @@ class Layout extends React.Component {
                 <div className="c-wrapper">
                     <div className="middle">
                         <Navigation />
-                        <Content model={model}>
+                        <Content>
                             { children }
                         </Content>
                     </div>

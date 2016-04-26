@@ -4,8 +4,6 @@ import { Link } from "react-router";
 
 class Tasks extends React.Component {
     render() {
-        const { } = this.props;
-        
         return (
             <div className="tasks">
                 <h2 className="tasks_title">Задачи</h2>

@@ -8,7 +8,7 @@ import { Router, Route, IndexRoute, Redirect} from "react-router";
 
 import Layout                           from "./Layout";
 import      Stat                        from "./Layout/Content/Stat";
-import      Report                      from "./Layout/Content/Report";
+import      Report                      from "./Layout/Content/Report/Report.view";
 import      CashReceipts                from "./Layout/Content/CashReceipts";
 import      Cashbox                     from "./Layout/Content/Cashbox";
 import          Registration            from "./Layout/Content/Cashbox/Registration";
@@ -21,37 +21,13 @@ import {Provider} from 'react-redux'
 import {compose, createStore, applyMiddleware} from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { take, put, select, call } from 'redux-saga/effects'
-var m = createSagaMiddleware();
+import reelmRunner from 'reelm';
 
-function postData(model) {
-    return axios.post("http://mp04lr1z.dev.kontur:3001/setModel", model).then(response => ({response}));
-}
 
-function* registrationSaga() {
-    while(true) {
-        yield take('StartPosting');
-        var model = yield select();
-        var registrationData = model.get('Registration').toJS();
-        yield call(postData, registrationData);
-        yield put({ type: 'EndPosting' })
-    }
-}
+import { Refresh } from './Layout/Content/Report/Report.reducer';
+import indexReducer, { Report as ReportNamespace } from './index.reducer';
 
-function appReducer(state = Map(), action) {
-    if (action.type === 'Change') {
-        return state.update('Registration', x => x.mergeDeep(action.data));
-    }
-    if (action.type === 'DataRetrieved') {
-        return fromJS(action.data.Content.Cashbox);
-    }
-    return state;
-}
-
-var store = createStore(appReducer, compose(applyMiddleware(m), window.devToolsExtension ? window.devToolsExtension() : f => f));
-
-m.run(registrationSaga);
-
-//"retail-ui": "git+ssh://git@git.skbkontur.ru:catalogue/retail-ui.git#79b8fe88c589d3f93689c5499ee0a285af887ab4",
+var store = createStore(indexReducer, compose(reelmRunner(), window.devToolsExtension ? window.devToolsExtension() : f => f));
 
 class App extends React.Component {
     render(){
@@ -59,7 +35,7 @@ class App extends React.Component {
             <div>
                 <Router history={browserHistory}>
                     <Route path="/" component={Layout}>
-                        <IndexRoute component={Report} />
+                        <IndexRoute component={Report} onEnter={() => store.dispatch({ type: `${ReportNamespace}.${Refresh}` })} />
                         <Route path="stat" component={Stat} />
                         <Route path="cash-receipts" component={CashReceipts} />
                         <Route path="cashbox">
