@@ -1,11 +1,23 @@
-import { Map } from 'immutable'
-import { defineReducer } from 'reelm/composition'
-import { spoiled } from 'reelm'
-import { call, put } from 'reelm/effects'
+import { Map } from "immutable"
+import { defineReducer } from "reelm/fluent"
+import { call } from "reelm/effects";
 
-import reportReducer from './Layout/Content/Report/Report.reducer' ;
+import OfdApi from "./Api/OfdApi";
 
-export const Report = 'Report';
+import reportReducer from "./Layout/Content/Report/Report.reducer";
+import cashReceiptsReducer from "./Layout/Content/CashReceipts/CashReceipts.reducer";
+
+export const Report = "Report";
+export const CashReceipts = "CashReceipts";
 
 export default defineReducer(Map())
-    .scopeTo(Report, ['report'], reportReducer)
+    .scopedOver(Report, ["report"], reportReducer)
+    .scopedOver(CashReceipts, ["cashReceipts"], cashReceiptsReducer)
+    .mapEffects(x => {
+        if (x.type === "GetOfdApi") {
+            return call(function* () { 
+                return new OfdApi(window.apiURL, window.organizationId) 
+            });
+        }
+        return x;
+    })

@@ -15,6 +15,9 @@
     "plugins": [
         "react"
     ],
+    "globals": {
+        "Promise": false
+    },
     "extends": "eslint:recommended",
     "root": false
 }

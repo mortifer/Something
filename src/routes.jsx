@@ -13,7 +13,7 @@ import              FiscalStorage       from "./Layout/Content/Cashbox/Registrat
 
 export default (
     <Route path="/" component={Layout} >
-        <IndexRoute component={Report}/>
+        <IndexRoute component={Report} />
         <Route path="stat" component={Stat} />
         <Route path="cashbox">
             <IndexRoute component={Cashbox} />

@@ -4,7 +4,7 @@ import Notifications from "./Notifications/Notifications.view";
 import Tasks from "./Tasks/Tasks.view";
 import Graphs from "./Graphs/Graphs.view";
 
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import "./report.less";
 
 function Report({ error, empty, model }) {
@@ -32,8 +32,8 @@ function Report({ error, empty, model }) {
 
 export default connect(
     state => ({ 
-        empty: state.getIn(['report', 'empty']), 
-        error: state.getIn(['report', 'error']), 
-        model: state.getIn(['report', 'empty']) ? undefined : state.getIn(['report', 'data']).toJS()
+        empty: state.getIn(["report", "empty"]), 
+        error: state.getIn(["report", "error"]), 
+        model: state.getIn(["report", "empty"]) ? undefined : state.getIn(["report", "data"]).toJS()
     })
 )(Report);
