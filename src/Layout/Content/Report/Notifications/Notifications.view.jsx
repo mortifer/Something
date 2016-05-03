@@ -8,8 +8,8 @@ export default function({notifications}){
     return (
         <div className="notifications">
             <h2 className="notifications_title">Уведомления</h2>
-            {notifications.map(notification => (
-                <div className="notifications_item">
+            {notifications.map((notification,i) => (
+                <div key={i} className="notifications_item">
                    <Link to="/?" className="link">{notification.text}</Link>
                 </div>
             ))}

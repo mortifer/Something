@@ -3,6 +3,8 @@ const bodyParser = require('body-parser')
 const http = require('http')  
 const app = express()
 
+var cashReceiptsCounter = 0;
+
 app.use(bodyParser.json());
 
 app.use(function(req, res, next) {
@@ -12,12 +14,14 @@ app.use(function(req, res, next) {
 });
 
 app.get('/getModel/Report/Graph/Table', function (req, res) {
+    cashReceiptsCounter = cashReceiptsCounter + Math.round(Math.random()*10)
+    if ( cashReceiptsCounter > 500 ) cashReceiptsCounter = 0;
     const Table = [
         {
             dateDescription: { title: 'Сегодня', rangeDescription: '20 апреля, среда' },
-            cashReceiptsTotal: 117111.78,
-            cashReceiptsCount: 105,
-            cashReceiptsMean: 1881.59 
+            cashReceiptsTotal: 117111.78 + cashReceiptsCounter * 100,
+            cashReceiptsCount: 105 + cashReceiptsCounter,
+            cashReceiptsMean: ((117111.78 + cashReceiptsCounter * 100) / (105 + cashReceiptsCounter)).toFixed(2)
         },
         {
             dateDescription: { title: 'Вчера', rangeDescription: '19 апреля, вторник' },
@@ -36,52 +40,77 @@ app.get('/getModel/Report/Graph/Table', function (req, res) {
 });
 
 app.get('/getModel/Report/Tasks', function (req, res) {
-    res.send([
-        { text: "Продлить обслуживание у оператора фискальных данных", tillDate: new Date(2016, 3, 15) },
-        { text: "Перерегистрировать кассу «Павильон на Сурикова»", tillDate: new Date(2016, 3, 27) },
-    ]);    
+    Math.random() > 0.5 ?
+        (
+            res.send([
+                { text: "Продлить обслуживание у оператора фискальных данных", tillDate: new Date(2016, 3, 15) },
+                { text: "Перерегистрировать кассу «Павильон на Сурикова»", tillDate: new Date(2016, 3, 27) },
+                { text: "Сделайте уже что-нибудь", tillDate: new Date(2016, 3, 30) }
+            ])
+        ) : (
+            res.send([
+                { text: "Продлить обслуживание у оператора фискальных данных", tillDate: new Date(2016, 3, 15) },
+                { text: "Перерегистрировать кассу «Павильон на Сурикова»", tillDate: new Date(2016, 3, 27) },
+            ])
+        )
 });
 
 app.get('/getModel/Report/Notifications', function (req, res) {
-    res.send([
-        { text: "Касса «№ 2 на 8 марта»: получена регистрационная карта" }
-    ]);    
+
+    Math.random() > 0.5 ?
+        (
+            res.send([
+                { text: "Касса «№ 2 на 8 марта»: получена регистрационная карта" }
+            ])
+        ) : (
+            res.send([
+                { text: "Касса «№ 2 на 8 марта»: получена регистрационная карта" },
+                { text: "Что-то произошло..." },
+                { text: "Тысяча уведомлений, сударь!" }
+            ])
+        )
 });
 
 app.get('/getModel/Report/Graph/Chart', function (req, res) {
     var Graph = {
         cols: [
             {
-                cashReceiptsTotalValue: 350000.00,
+                cashReceiptsTotalValue: (Math.random()*200000 + 100000).toFixed(2),
                 cashReceiptsCount: 0,
-                cashReceiptsMiddleValue: 0
+                cashReceiptsMiddleValue: 0,
+                date: new Date(2016, 4,14)
             },{
-                cashReceiptsTotalValue: 280000.00,
+                cashReceiptsTotalValue: (Math.random()*200000 + 100000).toFixed(2),
                 cashReceiptsCount: 0,
-                cashReceiptsMiddleValue: 0
+                cashReceiptsMiddleValue: 0,
+                date: new Date(2016, 4,15)
             },{
-                cashReceiptsTotalValue: 300000.00,
+                cashReceiptsTotalValue: (Math.random()*200000 + 100000).toFixed(2),
                 cashReceiptsCount: 0,
-                cashReceiptsMiddleValue: 0
+                cashReceiptsMiddleValue: 0,
+                date: new Date(2016, 4,16)
             },{
                 cashReceiptsTotalValue: 324678.78,
                 cashReceiptsCount: 143,
-                cashReceiptsMiddleValue: 1983.76
+                cashReceiptsMiddleValue: 1983.76,
+                date: new Date(2016, 4,17)
             },{
-                cashReceiptsTotalValue: 300000.00,
+                cashReceiptsTotalValue: (Math.random()*200000 + 100000).toFixed(2),
                 cashReceiptsCount: 0,
-                cashReceiptsMiddleValue: 0
+                cashReceiptsMiddleValue: 0,
+                date: new Date(2016, 4,18)
             },{
-                cashReceiptsTotalValue: 270000.00,
+                cashReceiptsTotalValue:  (Math.random()*200000 + 100000).toFixed(2),
                 cashReceiptsCount: 0,
-                cashReceiptsMiddleValue: 0
+                cashReceiptsMiddleValue: 0,
+                date: new Date(2016, 4,19)
             },{
-                cashReceiptsTotalValue: 300000.00,
+                cashReceiptsTotalValue:  (Math.random()*200000 + 100000).toFixed(2),
                 cashReceiptsCount: 0,
-                cashReceiptsMiddleValue: 0
+                cashReceiptsMiddleValue: 0,
+                date: new Date(2016, 4,20)
             }
-        ],
-        maxValue: 350000.00
+        ]
     }
     res.send(Graph);    
 });

@@ -12,11 +12,11 @@ Upgrades.enableHeight34();
 class CashReceipts extends React.Component {
     render() {
         const {} = this.props;
-        const model = AppModel.Content.CashReceipts; 
+        //const model = AppModel.Content.CashReceipts;
 
         return (
             <div className="report">
-                <h2>{model.Title}</h2>
+                <h2>Чеки</h2>
                 <span>Все чеки</span>
                 <span>По номеру</span>
                 <div>

@@ -134,7 +134,7 @@ const dropdownsHandle = () => {
                     $(window).trigger("c-dropdown.closed", ["c-dropdown.closed.force"]);
                 }
                 if ($(this).hasClass("-checked")) return false;
-                return false; // костыль для отсутвующей обработки данных            
+                //return false; // костыль для отсутвующей обработки данных
             };
         });
 
@@ -185,7 +185,7 @@ class Header extends React.Component {
                         <div className="c-dropdown_content" data-for-dropdown-id="Settings">
                             <div class="c-dropdown_list">
                                 <a href="#" className="c-dropdown_list_item c-link">Организация</a>
-                                <a href="#" className="c-dropdown_list_item c-link">Кассы</a>
+                                <Link to="/cashbox" className="c-dropdown_list_item c-link" activeClassName="-active">Кассы</Link>
                             </div>
                             <div className="c-dropdown_hr"></div>
                             <div className="c-dropdown_content_payment">

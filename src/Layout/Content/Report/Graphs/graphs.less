@@ -7,6 +7,7 @@
     table {
         border-collapse: collapse;
         width: 100%;
+        margin: 0 0 20px 0;
     }
 
     td {
@@ -50,20 +51,62 @@
 }
 
 .cols {
-    height: 200px;
+    height: 185px;
     display: flex;
     align-items: flex-end;
 
     &_col {
         background-color: #ffdfaa;
-        background-clip: content-box;
+        background-image: linear-gradient(to top, #ffdfaa, #ffefd4);
+        //background-clip: content-box;
         box-sizing: border-box;
-        &:hover {
-            background-image: linear-gradient(to bottom, #ffd299, #ff9b1c);
-            cursor: pointer;
+        height: 0;
+        position: relative;
+        border-right: solid 1px rgba(255, 255, 255, 0.25);
+
+        > span {
+            position: absolute;
+            bottom: -25px;
+            opacity: 0;
+            white-space: nowrap;
+            > span {
+                display: none;
+            }
         }
 
-        height: 0;
+        &:first-child,
+        &:last-child {
+            > span {
+                opacity: 1;
+            }
+        }
+
+        &:last-child {
+            border: none;
+            > span {
+                right: 0;
+            }
+        }
+
+        &:hover {
+            background-image: linear-gradient(to top, #FF9c00, #FFD395);
+            border: none;
+            cursor: pointer;
+
+            > span {
+                opacity: 1;
+                > span {
+                    display: inline;
+                }
+            }
+
+            &:last-child {
+                > span {
+                    left: 0;
+                }
+            }
+        }
+
     }
 
     &__week &_col {

@@ -2,7 +2,7 @@ import React from "react";
 
 import Notifications from "./Notifications/Notifications.view";
 import Tasks from "./Tasks/Tasks.view";
-import Graphs from "./Graphs";
+import Graphs from "./Graphs/Graphs.view";
 
 import { connect } from 'react-redux';
 import "./report.less";

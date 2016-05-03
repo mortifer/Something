@@ -18,16 +18,17 @@ import              CashboxDevice       from "./Layout/Content/Cashbox/Registrat
 import              FiscalStorage       from "./Layout/Content/Cashbox/Registration/FiscalStorage";
 
 import {Provider} from 'react-redux'
-import {compose, createStore, applyMiddleware} from 'redux'
-import createSagaMiddleware from 'redux-saga'
-import { take, put, select, call } from 'redux-saga/effects'
+import {compose, createStore} from 'redux'
 import reelmRunner from 'reelm';
-
 
 import { Refresh } from './Layout/Content/Report/Report.reducer';
 import indexReducer, { Report as ReportNamespace } from './index.reducer';
 
 var store = createStore(indexReducer, compose(reelmRunner(), window.devToolsExtension ? window.devToolsExtension() : f => f));
+
+window.apiURLfake = "http://mp04lr1z.dev.kontur:3001";
+window.apiURL = "http://mp04lr1z.dev.kontur:11002";
+window.organizationId = "3C3DC287-E0B2-4142-A6B8-DE0F6CCD8DBE";
 
 class App extends React.Component {
     render(){
@@ -63,8 +64,7 @@ ReactDOM.render(
     document.getElementById("root")
 );
 
-
-axios.get('http://mp04lr1z.dev.kontur:3001/getModel')
+axios.get(apiURLfake + '/getModel')
     .then(function (response) {
         store.dispatch({ type: 'DataRetrieved', data: response.data })
     });
