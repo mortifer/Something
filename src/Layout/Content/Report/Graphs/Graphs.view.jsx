@@ -81,9 +81,9 @@ export default function({ model: { table, graph } }) {
                 <thead>
                     <tr>
                         <td></td>
-                        <td>Выручка, <span class="rur">₽</span></td>
+                        <td>Выручка, <span className="rur">₽</span></td>
                         <td>Чеки</td>
-                        <td>Средний чек, <span class="rur">₽</span></td>
+                        <td>Средний чек, <span className="rur">₽</span></td>
                     </tr>
                 </thead>
                 <tbody>

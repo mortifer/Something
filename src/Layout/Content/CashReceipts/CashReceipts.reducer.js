@@ -44,29 +44,30 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
             cashReceiptsUpdating: false,
             changedSinceLastUpdate: false
         }))
-
     .on(SalesPointsBeginUpdate, state => state.merge({ salesPointsUpdating: true }))
     .on(SalesPointsUpdated, (state, { salesPoints }) => state
         .merge({
             salesPoints: salesPoints,
             salesPointsUpdating: false
-        }))    
+        }))
     .on(SalesPointsUpdated, (state, { salesPoints }) => {
         var currentSalesPoint = state.getIn(["form", "salesPoint"]);
         if (!currentSalesPoint) {
             return spoiled(
                 state
                     .setIn(["form", "salesPoint"], salesPoints[0].id)
-                    .merge({ changedSinceLastUpdate: true }),
-                updateCashReceipts);
+                    .merge({ changedSinceLastUpdate: true })//,
+                    //updateCashReceipts);
+                );
         }
         else {
             if (!salesPoints.map(x => x.id).includes(currentSalesPoint)) {
                 return spoiled(
                     state
                         .setIn(["form", "salesPoint"], salesPoints[0].id)
-                        .merge({ changedSinceLastUpdate: true }),
-                    updateCashReceipts);
+                        .merge({ changedSinceLastUpdate: true })//,
+                        //updateCashReceipts
+                    );
             }
         }
         return state;

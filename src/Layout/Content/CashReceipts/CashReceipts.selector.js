@@ -6,7 +6,7 @@ export default state => {
             salesPoints: (state.salesPoints || []).map(s => [s.id, s.name]),
             salesPointsUpdating: state.salesPointsUpdating
         },
-        cashreceipts: state.cashreceipts || [],
+        cashReceipts: state.cashreceipts || [],
         cashReceiptsUpdating: state.cashReceiptsUpdating
     })
 }

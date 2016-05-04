@@ -10,7 +10,7 @@ export const Refresh = "Refresh";
 export const DataRetrieved = "DataRetrieved";
 export const DataRetrievingError = "DataRetrievingError";
 
-const delay = tm => new Promise(r => setTimeout(r, tm)); // ха-ха, таймеры то сбрасывать надо
+const delay = tm => new Promise(r => setTimeout(r, tm));
 
 export default defineReducer(Map({ empty: true, data: undefined, runRefresh: false }))
     .on(DataRetrieved, 

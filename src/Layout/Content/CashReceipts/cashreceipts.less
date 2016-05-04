@@ -1,0 +1,103 @@
+.cashreceipts {
+
+
+    &_filters {
+        margin: 15px 0;
+        display: flex;
+
+        > div {
+            padding: 0 10px 0 0;
+        }
+
+        &_delimiter {
+            line-height: 34px;
+            margin: 0 5px;
+        }
+
+        .rur,
+        &_sumsFrom,
+        &_sumsTo {
+            margin: 0 5px;
+        }
+
+        &_returns {
+            margin: -5px 0 0 0;
+            position: relative;
+        }
+    }
+
+    table {
+        border-collapse: collapse;
+        line-height: 25px;
+        margin: 20px 0;
+    }
+
+    thead, tfoot {
+        color: #808080;
+        font-size: 12px;
+    }
+
+    thead {
+        border-bottom: solid 1px #e4e4e4;
+    }
+
+    td {
+        padding: 5px 0 0 30px;
+
+        &:first-child {
+            padding-left: 0;
+        }
+
+        &:nth-child(2) {
+            text-align: right;
+        }
+    }
+
+    tbody {
+        tr:first-child {
+            td {
+                padding-top: 15px;
+            }
+        }
+    }
+
+    tfoot {
+        td:last-child {
+            font-size: 14px;
+            position: relative;
+            a {
+                position: absolute;
+                right: 0;
+                top: 4px;
+                white-space: nowrap;
+                &:after {
+                    content:"";
+                    font-family: "Icons";
+                    position: absolute;
+                    right: -16px;
+                }
+            }
+        }
+    }
+
+    &_title {
+        display: inline-block;
+    }
+
+    &_searchType {
+        line-height: 32px;
+        display: inline-block;
+        margin: 0 0 0 20px;
+
+        span, a {
+            padding: 0 10px;
+            border-radius: 3.1px;
+            display: inline-block;
+        }
+
+        span {
+            background: #f1f1f1;
+        }
+    }
+}
+
