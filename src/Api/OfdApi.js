@@ -45,6 +45,7 @@ export default class OfdApi {
     }
 
     async getCashreceipts(from, to)  {
+        await delay(500);
         return await this.catchError(async () => {
             var response = await axios.get(
                 this.prefix + "/v1/organizations/" +

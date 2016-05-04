@@ -7,6 +7,8 @@ import { getOfdApi } from "../../../Effects";
 
 export const Change = "Change";
 export const Enter = "Enter";
+export const DataRetrievingError = "DataRetrievingError";
+
 const SalesPointsUpdated = "SalesPointsUpdated";
 const SalesPointsBeginUpdate = "SalesPointsBeginUpdate";
 
@@ -17,34 +19,43 @@ const CashReceiptsBeginUpdate = "CashReceiptsBeginUpdate";
 function * updateCashReceipts() {
     var api = yield getOfdApi();
 
-    let cashreceipts;
-    const [form, changedSinceLastUpdate] = yield select(x => [x.toJS().form, x.toJS().changedSinceLastUpdate]);
-    if (!changedSinceLastUpdate)
-        return;
-    yield put({ type: CashReceiptsBeginUpdate });
+    try {
+        let cashReceipts;
+        const [form, changedSinceLastUpdate] = yield select(x => [x.toJS().form, x.toJS().changedSinceLastUpdate]);
+        if (!changedSinceLastUpdate)
+            return;
 
-    if (!form.salesPoint) {
-        cashreceipts = yield call(() => api.getCashreceipts(form.from, form.to))
+        yield put({ type: CashReceiptsBeginUpdate });
+
+        if (!form.salesPoint) {
+            cashReceipts = yield call(() => api.getCashreceipts(form.from, form.to))
+        }
+        else {
+            cashReceipts = yield call(() => api.getCashreceiptsBySalesPoint(form.from, form.to, form.salesPoint));
+        }
+        yield put({ type: CashReceiptsUpdated, cashReceipts: cashReceipts });
     }
-    else {
-        cashreceipts = yield call(() => api.getCashreceiptsBySalesPoint(form.from, form.to, form.salesPoint));
+    catch (e) {
+        yield put({ type: DataRetrievingError, error: e.toString() });
     }
-    yield put({ type: CashReceiptsUpdated, cashreceipts: cashreceipts });
 }
 
 export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() }), changedSinceLastUpdate: true }))
+    .on(DataRetrievingError,
+        (state, { error }) => state.merge({cashReceiptsUpdating: false, error: error }))
+
     .on(Change, (state, { data }) => state.mergeDeepIn(["form"], data))
-    .on(Change, (state, { data }) => state.merge({ 
+    .on(Change, (state, { data }) => state.merge({
         changedSinceLastUpdate: true
     }))
-    .on(CashReceiptsBeginUpdate, state => state.merge({ cashReceiptsUpdating: true }))
-    .on(CashReceiptsUpdated, (state, { cashreceipts }) => 
+    .on(CashReceiptsBeginUpdate, state => state.merge({ cashReceiptsUpdating: true, error: null }))
+    .on(CashReceiptsUpdated, (state, { cashReceipts }) =>
         state.merge({
-            cashreceipts: cashreceipts,
+            cashReceipts: cashReceipts,
             cashReceiptsUpdating: false,
             changedSinceLastUpdate: false
         }))
-    .on(SalesPointsBeginUpdate, state => state.merge({ salesPointsUpdating: true }))
+    .on(SalesPointsBeginUpdate, state => state.merge({ salesPointsUpdating: true, error: null}))
     .on(SalesPointsUpdated, (state, { salesPoints }) => state
         .merge({
             salesPoints: salesPoints,
@@ -78,8 +89,9 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
 
         yield* updateCashReceipts(api);
 
-        yield put({ type: SalesPointsBeginUpdate });
+        yield put({type: SalesPointsBeginUpdate});
         var salesPoints = yield call(() => api.getSalesPoints());
-        yield put({ type: SalesPointsUpdated, salesPoints: salesPoints });
+        yield put({type: SalesPointsUpdated, salesPoints: salesPoints});
 
-    }))
+    }));
+

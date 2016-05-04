@@ -5,22 +5,21 @@ import "./cashreceipts.less";
 
 import Input from "ui/Input";
 import DatePicker from "ui/DatePicker";
-import Dropdown, { MenuItem, Separator } from "ui/Dropdown";
 import Checkbox from "ui/Checkbox";
 import Select from "ui/Select";
+import Loader from "ui/Loader";
 
 import Upgrades from "retail-ui/lib/Upgrades"; 
 Upgrades.enableHeight34();
 
 import { Change, CashReceiptsRequestUpdate } from "./CashReceipts.reducer"
 
-function formatMoney(money) {
+function formatMoney(money, isReturn) {
     var tmp = money.toFixed(2).split(".");
-    return (<td>{parseInt(tmp[0]).toLocaleString()}<span>,{tmp[1]}</span></td>);
+    return (<td>{ isReturn ? <span className="isReturn" />:null }{parseInt(tmp[0]).toLocaleString()}<span>,{tmp[1]}</span></td>);
 }
 
-
-function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch }) {
+function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, error }) {
     const onChange = data => dispatch({ type: Change, data: data });
     const onCashReceiptsRequestUpdate = () => dispatch({ type: CashReceiptsRequestUpdate });
 
@@ -80,35 +79,44 @@ function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch }) {
                 <Checkbox>Только чеки на возврат</Checkbox>
             </div>
 
-            {cashReceiptsUpdating ? <div>Loading...</div> : null}
-            {
-                cashReceipts.length ?
-                    (
-                        <table>
-                            <thead>
-                                <tr>
-                                    <td>Время</td>
-                                    <td>Сумма, <span className="rur">₽</span></td>
-                                    <td>№ чека</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {cashReceipts.map((item, i) => (
-                                    <tr key={i}>
-                                        <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
-                                        {formatMoney(item.total)}
-                                        <td><a href={item.href} className="link">{item.fiscalDocumentNumber}</a></td>
+            { error ?
+                <div className="validation validation__error">{error} - тут реально ошибка, т.к. диапазон дат неверный. </div> :
+                <Loader type="big" active={cashReceiptsUpdating} >
+                    {
+                        cashReceipts.length ?
+                            (
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <td>Время</td>
+                                        <td>Сумма, <span className="rur">₽</span></td>
+                                        <td>№ чека</td>
                                     </tr>
-                                ))}
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colSpan="2">x из y</td>
-                                    <td><a href="#" className="link">Ещё 20 чеков</a></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    ): (<div>ничего не найденно</div>)
+                                    </thead>
+                                    <tbody>
+                                    {cashReceipts.map((item, i) => (
+                                        <tr key={i}>
+                                            <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
+                                            {formatMoney(item.total, item.isReturn)}
+                                            <td>
+                                                <a href={item.href} className="link">{item.fiscalDocumentNumber}</a>
+                                                {item.isReturn ? <span>Возврат</span> : null}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td colSpan="2">x из y</td>
+                                        <td><a href="#" className="link">Ещё 20 чеков</a></td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            ) : (
+                                <div>{/*ничего не найденно*/}</div>
+                            )
+                    }
+                </Loader>
             }
         </div>
     );

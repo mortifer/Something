@@ -1,5 +1,15 @@
 .cashreceipts {
 
+    .isReturn {
+        color: #d0021b;
+        &:before {
+            content: "";
+            font-family: "Icons";
+            font-size: 7px;
+            vertical-align: top;
+            margin: 0 4px 0 0;
+        }
+    }
 
     &_filters {
         margin: 15px 0;
@@ -42,7 +52,8 @@
     }
 
     td {
-        padding: 5px 0 0 30px;
+        padding: 5px 0 0 40px;
+        position: relative;
 
         &:first-child {
             padding-left: 0;
@@ -59,12 +70,18 @@
                 padding-top: 15px;
             }
         }
+
+        tr td:last-child span {
+            position: absolute;
+            width: 100px;
+            right: -110px;
+            font-style: italic;
+        }
     }
 
     tfoot {
         td:last-child {
             font-size: 14px;
-            position: relative;
             a {
                 position: absolute;
                 right: 0;
