@@ -9,7 +9,8 @@ import { Router, Route, IndexRoute, Redirect} from "react-router";
 import { forwardTo } from 'reelm';
 
 import Layout                           from "./Layout";
-import      Stat                        from "./Layout/Content/Stat";
+import      Statistics                  from "./Layout/Content/Statistics/Statistics.view";
+import      statisticsSelector          from "./Layout/Content/Statistics/Statistics.selector";
 import      Report                      from "./Layout/Content/Report/Report.view";
 import      CashReceipts                from "./Layout/Content/CashReceipts/CashReceipts.view";
 import      cashReceiptsSelector        from "./Layout/Content/CashReceipts/CashReceipts.selector";
@@ -26,7 +27,8 @@ import {reelmRunner} from "reelm";
 
 import { Enter, Leave } from "./Layout/Content/Report/Report.reducer";
 import { Enter as CashReceiptsEnter  } from "./Layout/Content/CashReceipts/CashReceipts.reducer";
-import indexReducer, { Report as ReportNamespace, CashReceipts as CashReceiptsNamespace } from "./index.reducer";
+import { Enter as StatisticsEnter, Leave as StatisticsLeave  } from "./Layout/Content/Statistics/Statistics.reducer";
+import indexReducer, { Report as ReportNamespace, CashReceipts as CashReceiptsNamespace, Statistics as StatisticsNamespace } from "./index.reducer";
 
 var store = createStore(indexReducer, compose(reelmRunner(), window.devToolsExtension ? window.devToolsExtension() : f => f));
 
@@ -39,6 +41,11 @@ const CashReceiptsConnected = connect(
     dispatch => ({ dispatch: forwardTo(dispatch, CashReceiptsNamespace) })
     )(CashReceipts);
 
+const StatisticsConnected = connect(
+    state => statisticsSelector(state.get("statistics")),
+    dispatch => ({ dispatch: forwardTo(dispatch, StatisticsNamespace) })
+    )(Statistics);
+
 class App extends React.Component {
     render(){
         return (
@@ -49,7 +56,10 @@ class App extends React.Component {
                             onEnter={() => store.dispatch({ type: `${ReportNamespace}.${Enter}` })}
                             onLeave={() => store.dispatch({ type: `${ReportNamespace}.${Leave}` })}
                             />
-                        <Route path="stat" component={Stat} />
+                        <Route path="statistics" component={StatisticsConnected}
+                           onEnter={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsEnter}` })}
+                           onLeave={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsLeave}` })}
+                            />
                         <Route path="cash-receipts" component={CashReceiptsConnected} 
                             onEnter={() => store.dispatch({ type: `${CashReceiptsNamespace}.${CashReceiptsEnter}` })}
                             />

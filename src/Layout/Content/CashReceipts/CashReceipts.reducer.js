@@ -48,6 +48,7 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
     .on(Change, (state, { data }) => state.merge({
         changedSinceLastUpdate: true
     }))
+    .on(CashReceiptsRequestUpdate, perform(call(updateCashReceipts)))    
     .on(CashReceiptsBeginUpdate, state => state.merge({ cashReceiptsUpdating: true, error: null }))
     .on(CashReceiptsUpdated, (state, { cashReceipts }) =>
         state.merge({
@@ -83,7 +84,6 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
         }
         return state;
     })
-    .on(CashReceiptsRequestUpdate, perform(call(updateCashReceipts)))
     .on(Enter, perform(function* () {
         var api = yield getOfdApi();
 
@@ -92,6 +92,5 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
         yield put({type: SalesPointsBeginUpdate});
         var salesPoints = yield call(() => api.getSalesPoints());
         yield put({type: SalesPointsUpdated, salesPoints: salesPoints});
-
     }));
 
