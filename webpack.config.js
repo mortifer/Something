@@ -16,7 +16,7 @@ const baseConfig = {
     context: path.join(__dirname, "src"),
 
     entry: {
-        vendors: ["babel-polyfill", "react", "axios", "gsap", "jquery","popper.js"]
+        vendors: ["babel-polyfill", "react", "axios", "gsap", "jquery","popper.js", "underscore"]
     },
 
     output: {
@@ -79,8 +79,8 @@ const baseConfig = {
 
     plugins: [
         new webpack.ProvidePlugin({
-            $: "jquery"
-            //Popper: "popper.js"
+            $: "jquery",
+            _: "underscore"
         }),
         new webpack.optimize.CommonsChunkPlugin({
             names: ["vendors"],

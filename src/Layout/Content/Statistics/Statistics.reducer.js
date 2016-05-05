@@ -26,7 +26,7 @@ function * updateStatistics() {
         let statistics;
         const form = yield select(x => x.toJS().form);
         yield put({ type: StatisticsBeginUpdate });
-        statistics = yield call(() => api.getCashreceiptsStatistics(form.from, form.to));
+        statistics = yield call(() => api.getCashreceiptsStatisticsBySalesPoints(form.from, form.to));
         yield put({ type: StatisticsUpdated, statistics: statistics });
     }
     catch (e) {
@@ -46,21 +46,7 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
             statistics: statistics,
             statisticsUpdating: false
         }))
-    
-    .on(SalesPointsBeginUpdate, state => state.merge({ salesPointsUpdating: true, error: null}))
-    .on(SalesPointsUpdated, (state, { salesPoints }) => state
-        .merge({
-            salesPoints: salesPoints,
-            salesPointsUpdating: false
-        }))
-    
     .on(Leave, state => state.merge({ runRefresh: false }))
     .on(Enter, perform(function* () {
-        var api = yield getOfdApi();
-
         yield* updateStatistics();
-
-        yield put({type: SalesPointsBeginUpdate});
-        var salesPoints = yield call(() => api.getSalesPoints());
-        yield put({type: SalesPointsUpdated, salesPoints: salesPoints});
     }));

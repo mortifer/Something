@@ -32,6 +32,18 @@ export default class OfdApi {
         });
     }
 
+    async getCashreceiptsStatisticsBySalesPoints(from, to)  {
+        await delay(500);
+        return await this.catchError(async () => {
+            var response = await axios.get(
+                this.prefix + "/v1/organizations/" +
+                this.organizationId + "/statistics/cashreceipt/salespoints?from="+
+                (from.toISOString().split("T"))[0] +
+                "&to="+ (to.toISOString().split("T"))[0]);
+            return response.data;
+        });
+    }
+
     async getCashreceiptsBySalesPoint(from, to, salesPointId)  {
         return await this.catchError(async () => {
             var response = await axios.get(

@@ -11,6 +11,7 @@ import { forwardTo } from 'reelm';
 import Layout                           from "./Layout";
 import      Statistics                  from "./Layout/Content/Statistics/Statistics.view";
 import      statisticsSelector          from "./Layout/Content/Statistics/Statistics.selector";
+import          SalesPoint              from "./Layout/Content/Statistics/SalesPoint.view";
 import      Report                      from "./Layout/Content/Report/Report.view";
 import      CashReceipts                from "./Layout/Content/CashReceipts/CashReceipts.view";
 import      cashReceiptsSelector        from "./Layout/Content/CashReceipts/CashReceipts.selector";
@@ -54,15 +55,15 @@ class App extends React.Component {
                     <Route path="/" component={Layout}>
                         <IndexRoute component={Report} 
                             onEnter={() => store.dispatch({ type: `${ReportNamespace}.${Enter}` })}
-                            onLeave={() => store.dispatch({ type: `${ReportNamespace}.${Leave}` })}
-                            />
-                        <Route path="statistics" component={StatisticsConnected}
-                           onEnter={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsEnter}` })}
-                           onLeave={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsLeave}` })}
-                            />
+                            onLeave={() => store.dispatch({ type: `${ReportNamespace}.${Leave}` })} />
+                        <Route path="statistics">
+                            <IndexRoute  component={StatisticsConnected}
+                                         onEnter={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsEnter}` })}
+                                         onLeave={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsLeave}` })} />
+                            <Route path="salesPoint" component={SalesPoint} />
+                        </Route>
                         <Route path="cash-receipts" component={CashReceiptsConnected} 
-                            onEnter={() => store.dispatch({ type: `${CashReceiptsNamespace}.${CashReceiptsEnter}` })}
-                            />
+                            onEnter={() => store.dispatch({ type: `${CashReceiptsNamespace}.${CashReceiptsEnter}` })} />
                         <Route path="cashbox">
                             <IndexRoute component={Cashbox} />
                             <Route path="registration" component={Registration} >

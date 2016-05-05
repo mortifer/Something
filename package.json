@@ -55,6 +55,7 @@
     "reelm": "0.1.x",
     "retail-ui": "git+ssh://git@git.skbkontur.ru:catalogue/retail-ui.git",
     "style-loader": "0.13.0",
+    "underscore": "1.8.3",
     "url-loader": "0.5.7",
     "webpack": "1.12.14",
     "webpack-merge": "0.8.4",
