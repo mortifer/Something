@@ -64,7 +64,7 @@ function Statistics({ form, statistics, statisticsUpdating, dispatch, error }) {
                             {statistics.map((item, i) => (
                                 <tr key={i}>
                                     <td>
-                                        <div><Link to={`/statistics/salesPoint?salesPointId=${item.groupId}`} className="link">{item.groupName}</Link></div>
+                                        <div><Link to={`/statistics/SalesPointStatistics?salesPointId=${item.groupId}`} className="link">{item.groupName}</Link></div>
                                     </td>
                                     {formatMoney(item.total)}
                                     <td>{item.count.toLocaleString()}</td>

@@ -27,8 +27,8 @@ function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, erro
         <div className="cashreceipts">
             <h2 className="cashreceipts_title">Чеки</h2>
             <div className="cashreceipts_searchType">
-                <span>Все чеки</span>
-                <a href="#" className="link">Поиск по номеру</a>
+                <span className="-active">Все чеки</span>
+                <span><a href="#" className="link">Поиск по номеру</a></span>
             </div>
             <div className="cashreceipts_filters">
                 <div className="cashreceipts_filters_dates">

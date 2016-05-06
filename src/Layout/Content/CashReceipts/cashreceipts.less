@@ -12,7 +12,7 @@
     }
 
     &_filters {
-        margin: 15px 0;
+        margin: 15px 0 15px 0;
         display: flex;
 
         > div {
@@ -105,16 +105,19 @@
         line-height: 32px;
         display: inline-block;
         margin: 0 0 0 20px;
+        font-size: 14px;
 
-        span, a {
+        vertical-align: top;
+
+        span {
             padding: 0 10px;
             border-radius: 3.1px;
             display: inline-block;
+            &.-active {
+                background: #f1f1f1;
+            }
         }
 
-        span {
-            background: #f1f1f1;
-        }
     }
 }
 

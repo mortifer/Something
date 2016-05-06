@@ -13,7 +13,7 @@ function Report({ error, empty, model }) {
             return <div>Error: {error}</div>
         }
         else {
-            return <div>Loading...</div>   
+            return <div></div>
         }            
     }
 

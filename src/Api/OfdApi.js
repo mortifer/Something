@@ -25,7 +25,7 @@ export default class OfdApi {
         return await this.catchError(async () => {
             var response = await axios.get(
                 this.prefix + "/v1/organizations/" + 
-                this.organizationId + "/statistics/cashreceipt?from="+ 
+                this.organizationId + "/statistics/cashReceipt?from="+
                 (from.toISOString().split("T"))[0] +
                 "&to="+ (to.toISOString().split("T"))[0]);
             return response.data;
@@ -37,7 +37,18 @@ export default class OfdApi {
         return await this.catchError(async () => {
             var response = await axios.get(
                 this.prefix + "/v1/organizations/" +
-                this.organizationId + "/statistics/cashreceipt/salespoints?from="+
+                this.organizationId + "/statistics/cashReceipt/salesPoints?from="+
+                (from.toISOString().split("T"))[0] +
+                "&to="+ (to.toISOString().split("T"))[0]);
+            return response.data;
+        });
+    }
+
+    async getStatisticsBySalesPoint(from, to, salesPointId)  {
+        return await this.catchError(async () => {
+            var response = await axios.get(
+                this.prefix + "/v1/organizations/" +
+                this.organizationId + "/statistics/cashReceipt/salesPoints/" + salesPointId + "?from=" +
                 (from.toISOString().split("T"))[0] +
                 "&to="+ (to.toISOString().split("T"))[0]);
             return response.data;

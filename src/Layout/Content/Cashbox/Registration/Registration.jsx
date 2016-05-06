@@ -21,7 +21,7 @@ class Registration extends React.Component {
 
         return (
             <div className="lightpage">
-                <div className="lightpage_back"><h2><Link to="/cashbox">Кассы</Link></h2></div>
+                <div className="lightpage_back"><h2><Link to="/cashbox" className="link">Кассы</Link></h2></div>
                 <Link to="/cashbox" className="lightpage_close"></Link>
 
                 <div className="lightpage_content">

@@ -10,14 +10,9 @@ export const Change = "Change";
 export const Refresh = "Refresh";
 export const DataRetrievingError = "DataRetrievingError";
 
-const SalesPointsUpdated = "SalesPointsUpdated";
-const SalesPointsBeginUpdate = "SalesPointsBeginUpdate";
-
 export const StatisticsRequestUpdate = "StatisticsRequestUpdate";
 const StatisticsBeginUpdate = "StatisticsBeginUpdate";
 const StatisticsUpdated = "StatisticsUpdated";
-
-//const delay = tm => new Promise(r => setTimeout(r, tm));
 
 function * updateStatistics() {
     var api = yield getOfdApi();
