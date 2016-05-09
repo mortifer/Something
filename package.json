@@ -52,7 +52,7 @@
     "reduce-reducers": "0.1.2",
     "redux": "3.5.2",
     "redux-saga": "0.10.0",
-    "reelm": "0.1.x",
+    "reelm": "0.1.5",
     "retail-ui": "git+ssh://git@git.skbkontur.ru:catalogue/retail-ui.git",
     "style-loader": "0.13.0",
     "underscore": "1.8.3",

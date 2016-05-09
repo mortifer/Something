@@ -101,7 +101,7 @@ function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, erro
                                             <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
                                             {formatMoney(item.total, item.calculationType == "ReturnSell")}
                                             <td>
-                                                <Link to={`/cash-receipts/cashReceipt/${item.documentId}`} className="link">{item.number}</Link>
+                                                <Link to={`/CashReceipts/CashReceipt?fnSerialNumber=${item.fnSerialNumber}&documentId=${item.documentId}`} className="link">{item.number}</Link>
                                                 {item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell"  ? <span>Возврат</span> : null}
                                             </td>
                                         </tr>

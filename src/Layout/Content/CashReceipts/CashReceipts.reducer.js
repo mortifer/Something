@@ -48,7 +48,6 @@ function * retrieveCashReceiptsNextPage() {
         const form = yield select(x => x.toJS().form);
         yield put({ type: CashReceiptsBeginUpdate });
         const currentCashReceipts = yield select(x => x.getIn(["cashReceipts", "items"]).toJS());
-        console.log(currentCashReceipts)
         const anchorId = currentCashReceipts[currentCashReceipts.length - 1].documentId;
         if (!form.salesPoint) {
             cashReceipts = yield call(() => api.getCashreceipts(form.from, form.to, anchorId))

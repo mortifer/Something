@@ -77,7 +77,7 @@ class App extends React.Component {
                         <IndexRoute component={Report} 
                             onEnter={() => store.dispatch({ type: `${ReportNamespace}.${Enter}` })}
                             onLeave={() => store.dispatch({ type: `${ReportNamespace}.${Leave}` })} />
-                        <Route path="statistics">
+                        <Route path="Statistics">
                             <IndexRoute  component={StatisticsConnected}
                                          onEnter={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsEnter}` })}
                                          onLeave={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsLeave}` })} />
@@ -85,20 +85,20 @@ class App extends React.Component {
                                    onEnter={() => store.dispatch({ type: `${SalesPointStatisticsNamespace}.${SalesPointStatisticsEnter}` })}
                                    onLeave={() => store.dispatch({ type: `${SalesPointStatisticsNamespace}.${SalesPointStatisticsLeave}` })} />
                         </Route>
-                        <Route path="cash-receipts" component={CashReceiptsConnected} 
+                        <Route path="CashReceipts" component={CashReceiptsConnected}
                             onEnter={() => store.dispatch({ type: `${CashReceiptsNamespace}.${CashReceiptsEnter}` })}>
-                            <Route path="cashReceipt/:cashReceiptId" 
+                            <Route path="CashReceipt"
                                 component={CashReceiptViewerConnected}
-                                onEnter={({ params: { cashReceiptId } }) => store.dispatch({ type: `${CashReceiptViewerNamespace}.${CashReceiptViewerEnter}`, cashReceiptId: cashReceiptId })} 
+                                onEnter={({ query }) => store.dispatch({ type: `${CashReceiptViewerNamespace}.${CashReceiptViewerEnter}`, fnSerialNumber: "", cashReceiptId: "" })}
                                 />
                         </Route>
-                        <Route path="cashbox">
+                        <Route path="Cashbox">
                             <IndexRoute component={Cashbox} />
-                            <Route path="registration" component={Registration} >
+                            <Route path="Registration" component={Registration} >
                                 <IndexRoute component={CashboxApplication} />
-                                <Route path="registration#cashbox-owner" component={CashboxOwner} />
-                                <Route path="registration#cashbox-device" component={CashboxDevice} />
-                                <Route path="registration#fiscal-storage" component={FiscalStorage} />
+                                <Route path="Registration#cashbox-owner" component={CashboxOwner} />
+                                <Route path="Registration#cashbox-device" component={CashboxDevice} />
+                                <Route path="Registration#fiscal-storage" component={FiscalStorage} />
                             </Route>
                         </Route>
 

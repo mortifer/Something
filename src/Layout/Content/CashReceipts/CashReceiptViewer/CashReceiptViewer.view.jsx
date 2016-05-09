@@ -1,8 +1,8 @@
 import React from "react";
 
-export default function CashReceiptsViewer({ cachReceipt, loading, dispatch }) {
+export default function CashReceiptsViewer({ cashReceipt, loading, dispatch }) {
     if (loading) {
         return <div>Loading ...</div>
     }
-    return <div>{cachReceipt.someValueCashReceipt}</div>;
+    return <div>{JSON.stringify(cashReceipt)}</div>;
 }

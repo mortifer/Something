@@ -81,11 +81,15 @@ export default class OfdApi {
         });
     }
 
-    async getCashReceipt(cashReceiptId) {
-        await delay(500);
-        return { 
-            someValueCashReceipt: "value from api for " + cashReceiptId
-        };
+    async getCashReceipt(fnSerialNumber, cashReceiptId) {
+        return await this.catchError(async () => {
+            var response = await axios.get(
+                this.prefix + "/v1/organizations/" +
+                this.organizationId + "/cashReceipts/" +
+                fnSerialNumber + "/" +
+                cashReceiptId);
+            return response.data;
+        });
     }
 
     async getSalesPoints() {

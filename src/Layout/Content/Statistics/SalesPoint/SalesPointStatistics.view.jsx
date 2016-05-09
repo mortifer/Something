@@ -20,8 +20,8 @@ function SalesPointStatistics({ form, salesPointStatistics, salesPointStatistics
 
     return (
         <div className="lightpage">
-            <div className="lightpage_back"><h2><Link to="/statistics" className="link">Статистика</Link></h2></div>
-            <Link to="/statistics" className="lightpage_close"></Link>
+            <div className="lightpage_back"><h2><Link to="/Statistics" className="link">Статистика</Link></h2></div>
+            <Link to="/Statistics" className="lightpage_close"></Link>
 
             <div className="lightpage_content">
 
