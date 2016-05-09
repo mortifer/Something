@@ -25,5 +25,16 @@ export default defineReducer(Map())
                 return new OfdApi(window.apiURL, window.organizationId) 
             });
         }
+        if (x.type === "SaveState") {
+            return call(function* () {
+                console.log(JSON.stringify(x.value))
+                window.localStorage.setItem(x.key, JSON.stringify(x.value));
+            });
+        }
+        if (x.type === "LoadState") {
+            return call(function* () {
+                return JSON.parse(window.localStorage.getItem(x.key));
+            });
+        }
         return x;
     })

@@ -1,6 +1,5 @@
 export default state => {
     state = state.toJS();
-
     var transformedStatistics =
         _(_.groupBy(state.statistics,"groupId")).toArray().map(
             function (c) {

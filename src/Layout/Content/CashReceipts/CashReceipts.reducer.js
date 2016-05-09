@@ -1,4 +1,4 @@
-import { Map, List } from "immutable";
+import { Map, fromJS } from "immutable";
 import { spoiled } from "reelm";
 import { defineReducer, perform } from "reelm/fluent";
 import { put, call, select } from "reelm/effects";
@@ -7,6 +7,7 @@ import { getOfdApi } from "../../../Effects";
 
 export const Change = "Change";
 export const Enter = "Enter";
+export const LoadState = "LoadState";
 export const DataRetrievingError = "DataRetrievingError";
 
 const SalesPointsUpdated = "SalesPointsUpdated";
@@ -24,9 +25,7 @@ function * updateCashReceipts() {
         const [form, changedSinceLastUpdate] = yield select(x => [x.toJS().form, x.toJS().changedSinceLastUpdate]);
         if (!changedSinceLastUpdate)
             return;
-
         yield put({ type: CashReceiptsBeginUpdate });
-
         if (!form.salesPoint) {
             cashReceipts = yield call(() => api.getCashreceipts(form.from, form.to))
         }
@@ -45,7 +44,14 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
         (state, { error }) => state.merge({cashReceiptsUpdating: false, error: error }))
 
     .on(Change, (state, { data }) => state.mergeDeepIn(["form"], data))
-    .on(Change, (state, { data }) => state.merge({
+
+    .on(LoadState, (state, { value }) => state.set("form", fromJS(value)))
+    .on(Change, perform(function* () {
+        const data = yield select(x => x.get("form").toJS());
+        yield { type: "SaveState", key: "CashReceipts", value: data };
+    }))
+
+    .on(Change, (state) => state.merge({
         changedSinceLastUpdate: true
     }))
     .on(CashReceiptsRequestUpdate, perform(call(updateCashReceipts)))    
@@ -86,6 +92,11 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
     })
     .on(Enter, perform(function* () {
         var api = yield getOfdApi();
+        const formData = yield { type: "LoadState", key: "CashReceipts" };
+        if (formData !== null) { // TODO ЧЁ?! разобраться
+            yield put({ type: LoadState, value: { ...formData, from: new Date(formData.from), to: new Date(formData.to) } });    
+        }
+        
 
         yield* updateCashReceipts(api);
 
