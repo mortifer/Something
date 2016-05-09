@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import "./cashreceipts.less";
 
+import { Link } from 'react-router';
 import Input from "ui/Input";
 import DatePicker from "ui/DatePicker";
 import Checkbox from "ui/Checkbox";
@@ -12,16 +13,17 @@ import Loader from "ui/Loader";
 import Upgrades from "retail-ui/lib/Upgrades"; 
 Upgrades.enableHeight34();
 
-import { Change, CashReceiptsRequestUpdate } from "./CashReceipts.reducer"
+import { Change, CashReceiptsRequestUpdate, CashReceiptsRequestNextPage } from "./CashReceipts.reducer"
 
 function formatMoney(money, isReturn) {
     var tmp = money.toFixed(2).split(".");
     return (<td>{ isReturn ? <span className="isReturn" />:null }{parseInt(tmp[0]).toLocaleString()}<span>,{tmp[1]}</span></td>);
 }
 
-function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, error }) {
+function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, error, children }) {
     const onChange = data => dispatch({ type: Change, data: data });
     const onCashReceiptsRequestUpdate = () => dispatch({ type: CashReceiptsRequestUpdate });
+    const onNextPage = () => dispatch({ type: CashReceiptsRequestNextPage });
 
     return (
         <div className="cashreceipts">
@@ -78,9 +80,9 @@ function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, erro
             <div className="cashreceipts_filters_returns">
                 <Checkbox>Только чеки на возврат</Checkbox>
             </div>
-
+            {children}
             { error ?
-                <div className="validation validation__error">{error} - тут реально ошибка, т.к. диапазон дат неверный. </div> :
+                <div className="validation validation__error">{error}</div> :
                 <Loader type="big" active={cashReceiptsUpdating} >
                     {
                         cashReceipts.items && cashReceipts.items.length ?
@@ -99,7 +101,7 @@ function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, erro
                                             <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
                                             {formatMoney(item.total, item.calculationType == "ReturnSell")}
                                             <td>
-                                                <a href={`cashReceipt?documentId=${item.documentId}`} className="link">{item.number}</a>
+                                                <Link to={`/cash-receipts/cashReceipt/${item.documentId}`} className="link">{item.number}</Link>
                                                 {item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell"  ? <span>Возврат</span> : null}
                                             </td>
                                         </tr>
@@ -107,8 +109,12 @@ function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, erro
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td colSpan="2">20 из {cashReceipts.count}</td>
-                                        <td><a href="#" className="link">Ещё 20 чеков</a></td>
+                                        <td colSpan="2">{cashReceipts.items.length} из {cashReceipts.count}</td>
+                                        <td>
+                                            {cashReceipts.items.length < cashReceipts.count
+                                                ? <a className="link" onClick={onNextPage}>Ещё 20 чеков</a>
+                                                : null}
+                                        </td>
                                     </tr>
                                     </tfoot>
                                 </table>

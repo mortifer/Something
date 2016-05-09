@@ -14,6 +14,7 @@ const SalesPointsUpdated = "SalesPointsUpdated";
 const SalesPointsBeginUpdate = "SalesPointsBeginUpdate";
 
 export const CashReceiptsRequestUpdate = "CashReceiptsRequestUpdate";
+export const CashReceiptsRequestNextPage = "CashReceiptsRequestNextPage";
 const CashReceiptsUpdated = "CashReceiptsUpdated";
 const CashReceiptsBeginUpdate = "CashReceiptsBeginUpdate";
 
@@ -39,6 +40,29 @@ function * updateCashReceipts() {
     }
 }
 
+function * retrieveCashReceiptsNextPage() {
+    var api = yield getOfdApi();
+
+    try {
+        let cashReceipts;
+        const form = yield select(x => x.toJS().form);
+        yield put({ type: CashReceiptsBeginUpdate });
+        const currentCashReceipts = yield select(x => x.getIn(["cashReceipts", "items"]).toJS());
+        console.log(currentCashReceipts)
+        const anchorId = currentCashReceipts[currentCashReceipts.length - 1].documentId;
+        if (!form.salesPoint) {
+            cashReceipts = yield call(() => api.getCashreceipts(form.from, form.to, anchorId))
+        }
+        else {
+            cashReceipts = yield call(() => api.getCashreceiptsBySalesPoint(form.from, form.to, form.salesPoint, anchorId));
+        }
+        yield put({ type: CashReceiptsUpdated, cashReceipts: fromJS({ items: [...currentCashReceipts, ...cashReceipts.items], count: cashReceipts.count }) });
+    }
+    catch (e) {
+        yield put({ type: DataRetrievingError, error: e.toString() });
+    }
+}
+
 export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() }), changedSinceLastUpdate: true }))
     .on(DataRetrievingError,
         (state, { error }) => state.merge({cashReceiptsUpdating: false, error: error }))
@@ -54,6 +78,7 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
     .on(Change, (state) => state.merge({
         changedSinceLastUpdate: true
     }))
+    .on(CashReceiptsRequestNextPage, perform(call(retrieveCashReceiptsNextPage)))    
     .on(CashReceiptsRequestUpdate, perform(call(updateCashReceipts)))    
     .on(CashReceiptsBeginUpdate, state => state.merge({ cashReceiptsUpdating: true, error: null }))
     .on(CashReceiptsUpdated, (state, { cashReceipts }) =>

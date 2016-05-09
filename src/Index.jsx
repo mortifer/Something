@@ -15,6 +15,7 @@ import          SalesPointStatistics             from "./Layout/Content/Statisti
 import          salesPointStatisticsSelector     from "./Layout/Content/Statistics/SalesPoint/SalesPointStatistics.selector";
 import      Report                              from "./Layout/Content/Report/Report.view";
 import      CashReceipts                        from "./Layout/Content/CashReceipts/CashReceipts.view";
+import          CashReceiptViewer               from "./Layout/Content/CashReceipts/CashReceiptViewer/CashReceiptViewer.view";
 import      cashReceiptsSelector                from "./Layout/Content/CashReceipts/CashReceipts.selector";
 import      Cashbox                             from "./Layout/Content/Cashbox";
 import          Registration                    from "./Layout/Content/Cashbox/Registration";
@@ -31,7 +32,15 @@ import { Enter, Leave } from "./Layout/Content/Report/Report.reducer";
 import { Enter as CashReceiptsEnter  } from "./Layout/Content/CashReceipts/CashReceipts.reducer";
 import { Enter as StatisticsEnter, Leave as StatisticsLeave  } from "./Layout/Content/Statistics/Statistics.reducer";
 import { Enter as SalesPointStatisticsEnter, Leave as SalesPointStatisticsLeave  } from "./Layout/Content/Statistics/SalesPoint/SalesPointStatistics.reducer";
-import indexReducer, { Report as ReportNamespace, CashReceipts as CashReceiptsNamespace, Statistics as StatisticsNamespace, SalesPointStatistics as SalesPointStatisticsNamespace } from "./index.reducer";
+import { Enter as CashReceiptViewerEnter } from "./Layout/Content/CashReceipts/CashReceiptViewer/CashReceiptViewer.reducer";
+
+import indexReducer, { 
+    Report as ReportNamespace, 
+    CashReceipts as CashReceiptsNamespace, 
+    Statistics as StatisticsNamespace, 
+    SalesPointStatistics as SalesPointStatisticsNamespace ,
+    CashReceiptViewer as CashReceiptViewerNamespace
+} from "./index.reducer";
 
 var store = createStore(indexReducer, compose(reelmRunner(), window.devToolsExtension ? window.devToolsExtension() : f => f));
 
@@ -54,6 +63,11 @@ const SalesPointStatisticsConnected = connect(
     dispatch => ({ dispatch: forwardTo(dispatch, SalesPointStatisticsNamespace) })
     )(SalesPointStatistics);
 
+const CashReceiptViewerConnected = connect(
+    state => state.get("cashReceiptViewer").toJS(),
+    dispatch => ({ dispatch: forwardTo(dispatch, CashReceiptViewerNamespace) })
+    )(CashReceiptViewer);
+
 class App extends React.Component {
     render(){
         return (
@@ -72,7 +86,12 @@ class App extends React.Component {
                                    onLeave={() => store.dispatch({ type: `${SalesPointStatisticsNamespace}.${SalesPointStatisticsLeave}` })} />
                         </Route>
                         <Route path="cash-receipts" component={CashReceiptsConnected} 
-                            onEnter={() => store.dispatch({ type: `${CashReceiptsNamespace}.${CashReceiptsEnter}` })} />
+                            onEnter={() => store.dispatch({ type: `${CashReceiptsNamespace}.${CashReceiptsEnter}` })}>
+                            <Route path="cashReceipt/:cashReceiptId" 
+                                component={CashReceiptViewerConnected}
+                                onEnter={({ params: { cashReceiptId } }) => store.dispatch({ type: `${CashReceiptViewerNamespace}.${CashReceiptViewerEnter}`, cashReceiptId: cashReceiptId })} 
+                                />
+                        </Route>
                         <Route path="cashbox">
                             <IndexRoute component={Cashbox} />
                             <Route path="registration" component={Registration} >

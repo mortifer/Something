@@ -55,29 +55,37 @@ export default class OfdApi {
         });
     }
 
-    async getCashreceiptsBySalesPoint(from, to, salesPointId)  {
+    async getCashreceiptsBySalesPoint(from, to, salesPointId, anchorId)  {
         return await this.catchError(async () => {
             var response = await axios.get(
                 this.prefix + "/v1/organizations/" +
                 this.organizationId + "/cashReceiptMetas/salesPoints/" + salesPointId +
                 "?from="+(from.toISOString().split("T"))[0] +
                 "&to="+ (to.toISOString().split("T"))[0] +
-                "&count=20");
+                "&count=20" + 
+                (anchorId ? `&anchor=${anchorId}` : "") );
             return response.data;
         });
     }
 
-    async getCashreceipts(from, to) {
-        await delay(500);
+    async getCashreceipts(from, to, anchorId) {
         return await this.catchError(async () => {
             var response = await axios.get(
                 this.prefix + "/v1/organizations/" +
                 this.organizationId + "/cashReceiptMetas/" +
                 "?from="+(from.toISOString().split("T"))[0] +
                 "&to="+ (to.toISOString().split("T"))[0] +
-                "&count=20");
+                "&count=20" + 
+                (anchorId ? `&anchor=${anchorId}` : ""));
             return response.data;
         });
+    }
+
+    async getCashReceipt(cashReceiptId) {
+        await delay(500);
+        return { 
+            someValueCashReceipt: "value from api for " + cashReceiptId
+        };
     }
 
     async getSalesPoints() {
