@@ -45,22 +45,22 @@ function SalesPointStatistics({ form, salesPointStatistics, salesPointStatistics
                     {JSON.stringify(salesPointStatistics)}
                     <div className="statistics_perSalesPoint">
                         <div>
-                            Выручка, ₽<br/>
-                            42 551,35<br/>
-                            Наличными 31 656,18<br/>
-                            Безналичными 10 895,17<br/>
+                            <div className="statistics_perSalesPoint_title">Выручка, ₽</div>
+                            <div className="statistics_perSalesPoint_totals">42 551<span>,35</span></div>
+                            <div className="statistics_perSalesPoint_numbers">Наличными 31 656<span>,18</span></div>
+                            <div className="statistics_perSalesPoint_numbers">Безналичными 10 895,17</div>
                         </div>
                         <div>
-                            Всего чеков<br/>
-                            22<br/>
+                            <div className="statistics_perSalesPoint_title">Всего чеков</div>
+                            <div className="statistics_perSalesPoint_totals">22</div>
                             Смена<br/>
                             08:57 — 19:03<br/>
                             Смена<br/>
                             08:57 — открыта
                         </div>
                         <div>
-                            Средний чек, ₽<br/>
-                            1 934,15
+                            <div className="statistics_perSalesPoint_title">Средний чек, ₽</div>
+                            <div className="statistics_perSalesPoint_totals">1 934<span>,15</span></div>
                         </div>
                     </div>
                 </div>

@@ -59,23 +59,23 @@ export default class OfdApi {
         return await this.catchError(async () => {
             var response = await axios.get(
                 this.prefix + "/v1/organizations/" +
-                this.organizationId + "/cashReceipts/salesPoints/" + salesPointId +
+                this.organizationId + "/cashReceiptMetas/salesPoints/" + salesPointId +
                 "?from="+(from.toISOString().split("T"))[0] +
                 "&to="+ (to.toISOString().split("T"))[0] +
-                "&pageNumber=0");
+                "&count=20");
             return response.data;
         });
     }
 
-    async getCashreceipts(from, to)  {
+    async getCashreceipts(from, to) {
         await delay(500);
         return await this.catchError(async () => {
             var response = await axios.get(
                 this.prefix + "/v1/organizations/" +
-                this.organizationId + "/cashReceipts/" +
+                this.organizationId + "/cashReceiptMetas/" +
                 "?from="+(from.toISOString().split("T"))[0] +
                 "&to="+ (to.toISOString().split("T"))[0] +
-                "&pageNumber=0");
+                "&count=20");
             return response.data;
         });
     }

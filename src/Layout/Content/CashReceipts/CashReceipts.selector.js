@@ -7,7 +7,7 @@ export default state => {
             salesPointsUpdating: state.salesPointsUpdating
         },
         cashReceipts: state.cashReceipts || [],
-        cashReceiptsUpdating: state.cashReceiptsUpdating,
+        cashReceiptsUpdating: state.cashReceiptsUpdating || false,
         error: state.error
     })
 }

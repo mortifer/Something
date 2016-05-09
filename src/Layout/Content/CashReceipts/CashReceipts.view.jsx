@@ -83,7 +83,7 @@ function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, erro
                 <div className="validation validation__error">{error} - тут реально ошибка, т.к. диапазон дат неверный. </div> :
                 <Loader type="big" active={cashReceiptsUpdating} >
                     {
-                        cashReceipts.length ?
+                        cashReceipts.items && cashReceipts.items.length ?
                             (
                                 <table>
                                     <thead>
@@ -94,26 +94,26 @@ function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, erro
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {cashReceipts.map((item, i) => (
+                                    {cashReceipts.items.map((item, i) => (
                                         <tr key={i}>
                                             <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
-                                            {formatMoney(item.total, item.isReturn)}
+                                            {formatMoney(item.total, item.calculationType == "ReturnSell")}
                                             <td>
-                                                <a href={item.href} className="link">{item.fiscalDocumentNumber}</a>
-                                                {item.isReturn ? <span>Возврат</span> : null}
+                                                <a href={`cashReceipt?documentId=${item.documentId}`} className="link">{item.number}</a>
+                                                {item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell"  ? <span>Возврат</span> : null}
                                             </td>
                                         </tr>
                                     ))}
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td colSpan="2">x из y</td>
+                                        <td colSpan="2">20 из {cashReceipts.count}</td>
                                         <td><a href="#" className="link">Ещё 20 чеков</a></td>
                                     </tr>
                                     </tfoot>
                                 </table>
                             ) : (
-                                <div>{/*ничего не найденно*/}</div>
+                                <div>ничего не найденно</div>
                             )
                     }
                 </Loader>
