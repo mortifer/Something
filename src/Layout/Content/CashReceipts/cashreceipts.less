@@ -1,5 +1,10 @@
 .cashreceipts {
 
+    &_notFound {
+        margin: 40px 0;
+        font-style: italic;
+    }
+
     .isReturn {
         color: #d0021b;
         &:before {
@@ -14,6 +19,8 @@
     &_filters {
         margin: 15px 0 15px 0;
         display: flex;
+        flex-wrap: nowrap;
+        white-space: nowrap;
 
         > div {
             padding: 0 10px 0 0;

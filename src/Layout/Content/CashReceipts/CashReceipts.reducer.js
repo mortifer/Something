@@ -7,6 +7,7 @@ import { getOfdApi } from "../../../Effects";
 
 export const Change = "Change";
 export const Enter = "Enter";
+export const Leave = "Leave";
 export const LoadState = "LoadState";
 export const DataRetrievingError = "DataRetrievingError";
 
@@ -65,15 +66,12 @@ function * retrieveCashReceiptsNextPage() {
 export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() }), changedSinceLastUpdate: true }))
     .on(DataRetrievingError,
         (state, { error }) => state.merge({cashReceiptsUpdating: false, error: error }))
-
     .on(Change, (state, { data }) => state.mergeDeepIn(["form"], data))
-
     .on(LoadState, (state, { value }) => state.set("form", fromJS(value)))
     .on(Change, perform(function* () {
         const data = yield select(x => x.get("form").toJS());
         yield { type: "SaveState", key: "CashReceipts", value: data };
     }))
-
     .on(Change, (state) => state.merge({
         changedSinceLastUpdate: true
     }))
@@ -120,12 +118,12 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
         if (formData !== null) { // TODO ЧЁ?! разобраться
             yield put({ type: LoadState, value: { ...formData, from: new Date(formData.from), to: new Date(formData.to) } });    
         }
-        
 
         yield* updateCashReceipts(api);
 
         yield put({type: SalesPointsBeginUpdate});
         var salesPoints = yield call(() => api.getSalesPoints());
         yield put({type: SalesPointsUpdated, salesPoints: salesPoints});
-    }));
+    }))
+    .on(Leave, (state) => state.merge({ changedSinceLastUpdate: true }));
 

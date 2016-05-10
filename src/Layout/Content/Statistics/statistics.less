@@ -73,6 +73,64 @@
 
     &_perSalesPoint {
         display: flex;
+        margin: 40px 0 0 0;
+
+        > div {
+            text-align: right;
+            padding: 0 0 0 140px;
+            &:first-child {
+                padding: 0;
+            }
+        }
+
+        > div:first-child {
+            .statistics_perSalesPoint_title  {
+                text-align: left;
+            }
+        }
+
+        &_title,
+        &_numbers {
+            font-size: 18px;
+        }
+
+        &_numbers {
+            display: flex;
+            align-items: flex-end;
+            margin: 0 0 20px 0;
+            > div {
+                width: 100%;
+                padding: 0 0 0 40px;
+                font-size: 25px;
+                > span {
+                    font-size: 18px;
+                    color: #606060;
+                }
+            }
+        }
+
+        &_totals {
+            font-size: 64px;
+            font-weight: 200;
+            line-height: 87px;
+            height: 95px;
+            border-bottom: solid 1px #e1e1e1;
+            margin: 0 0 25px 0;
+            > span {
+                font-size: 50px;
+                color: #606060;
+            }
+        }
+
+        &_common {
+            margin-top: 20px;
+        }
+
+        > div:last-child {
+            .statistics_perSalesPoint_totals {
+                border-bottom: none;
+            }
+        }
 
 
     }

@@ -42,21 +42,25 @@ function SalesPointStatistics({ form, salesPointStatistics, salesPointStatistics
                                 onChange={(e, value) => { onChange({ to: value });  onSalesPointStatisticsRequestUpdate(); }} />
                         </div>
                     </div>
-                    {JSON.stringify(salesPointStatistics)}
+                    {/*JSON.stringify(salesPointStatistics)*/}
                     <div className="statistics_perSalesPoint">
                         <div>
                             <div className="statistics_perSalesPoint_title">Выручка, ₽</div>
                             <div className="statistics_perSalesPoint_totals">42 551<span>,35</span></div>
-                            <div className="statistics_perSalesPoint_numbers">Наличными 31 656<span>,18</span></div>
-                            <div className="statistics_perSalesPoint_numbers">Безналичными 10 895,17</div>
+                            <div className="statistics_perSalesPoint_numbers"><label>Наличными</label> <div>31 656<span>,18</span></div></div>
+                            <div className="statistics_perSalesPoint_numbers"><label>Безналичными</label> <div>10 895<span>,17</span></div></div>
                         </div>
                         <div>
                             <div className="statistics_perSalesPoint_title">Всего чеков</div>
                             <div className="statistics_perSalesPoint_totals">22</div>
-                            Смена<br/>
-                            08:57 — 19:03<br/>
-                            Смена<br/>
-                            08:57 — открыта
+                            <div className="statistics_perSalesPoint_common">
+                                <div>Смена</div>
+                                08:57 — 19:03
+                            </div>
+                            <div className="statistics_perSalesPoint_common">
+                                <div>Смена</div>
+                                08:57 — открыта
+                            </div>
                         </div>
                         <div>
                             <div className="statistics_perSalesPoint_title">Средний чек, ₽</div>

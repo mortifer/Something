@@ -8,10 +8,11 @@ function formatMoney(money) {
     return (<span>{parseInt(tmp[0]).toLocaleString()}<span>,{tmp[1]}</span></span>);
 }
 
-export default function CashReceiptsViewer({ cashReceipt, loading, dispatch }) {
+export default function CashReceiptsViewer ({ cashReceipt, loading, dispatch }) {
     if (loading) {
         return <div></div>
     }
+
     return (
         <div className="cashReceipt">
             <Link to="/CashReceipts" className="cashReceipt_close"></Link>
@@ -64,6 +65,9 @@ export default function CashReceiptsViewer({ cashReceipt, loading, dispatch }) {
                     <span>{cashReceipt.fiscalSignature}</span>
                 </div>
             </div>
+
+            <div className="cashReceipt_thanks">Спасибо за покупку, Дашкевич!</div>
+
         </div>
     )
 }

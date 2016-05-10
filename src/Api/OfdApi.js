@@ -33,7 +33,7 @@ export default class OfdApi {
     }
 
     async getCashreceiptsStatisticsBySalesPoints(from, to)  {
-        await delay(500);
+        //await delay(500);
         return await this.catchError(async () => {
             var response = await axios.get(
                 this.prefix + "/v1/organizations/" +

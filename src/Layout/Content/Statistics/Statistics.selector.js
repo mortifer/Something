@@ -17,16 +17,13 @@ export default state => {
                         groupId: "",
                         groupName: ""
                     });
-
                 return tmp;
             }
         );
 
     return ({
         form: {
-            ...state.form//,
-            //salesPoints: (state.salesPoints || []).map(s => [s.id, s.name]),
-            //salesPointsUpdating: state.salesPointsUpdating
+            ...state.form
         },
         statistics: transformedStatistics || [],
         statisticsUpdating: state.statisticsUpdating || false,

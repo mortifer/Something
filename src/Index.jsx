@@ -1,9 +1,7 @@
-import axios from "axios";
 import React from "react";
 import ReactDOM from "react-dom";
 import { connect } from 'react-redux';
 
-import { Map, fromJS } from "immutable";
 import { browserHistory } from "react-router";
 import { Router, Route, IndexRoute, Redirect} from "react-router";
 import { forwardTo } from 'reelm';
@@ -29,7 +27,7 @@ import {compose, createStore} from "redux"
 import {reelmRunner} from "reelm";
 
 import { Enter, Leave } from "./Layout/Content/Report/Report.reducer";
-import { Enter as CashReceiptsEnter  } from "./Layout/Content/CashReceipts/CashReceipts.reducer";
+import { Enter as CashReceiptsEnter, Leave as CashReceiptsLeave   } from "./Layout/Content/CashReceipts/CashReceipts.reducer";
 import { Enter as StatisticsEnter, Leave as StatisticsLeave  } from "./Layout/Content/Statistics/Statistics.reducer";
 import { Enter as SalesPointStatisticsEnter, Leave as SalesPointStatisticsLeave  } from "./Layout/Content/Statistics/SalesPoint/SalesPointStatistics.reducer";
 import { Enter as CashReceiptViewerEnter } from "./Layout/Content/CashReceipts/CashReceiptViewer/CashReceiptViewer.reducer";
@@ -71,41 +69,40 @@ const CashReceiptViewerConnected = connect(
 class App extends React.Component {
     render(){
         return (
-            <div>
-                <Router history={browserHistory}>
-                    <Route path="/" component={Layout}>
-                        <IndexRoute component={Report} 
-                            onEnter={() => store.dispatch({ type: `${ReportNamespace}.${Enter}` })}
-                            onLeave={() => store.dispatch({ type: `${ReportNamespace}.${Leave}` })} />
-                        <Route path="Statistics">
-                            <IndexRoute  component={StatisticsConnected}
-                                         onEnter={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsEnter}` })}
-                                         onLeave={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsLeave}` })} />
-                            <Route path="SalesPoint/:salesPointId" component={SalesPointStatisticsConnected}
-                                   onEnter={({ params }) => store.dispatch({ type: `${SalesPointStatisticsNamespace}.${SalesPointStatisticsEnter}`, salesPointId: params.salesPointId })}
-                                   onLeave={() => store.dispatch({ type: `${SalesPointStatisticsNamespace}.${SalesPointStatisticsLeave}` })} />
-                        </Route>
-                        <Route path="CashReceipts" component={CashReceiptsConnected}
-                            onEnter={() => store.dispatch({ type: `${CashReceiptsNamespace}.${CashReceiptsEnter}` })}>
-                            <Route path=":fnSerialNumber/:cashReceiptId"
-                                component={CashReceiptViewerConnected}
-                                onEnter={({ params }) => store.dispatch({ type: `${CashReceiptViewerNamespace}.${CashReceiptViewerEnter}`, fnSerialNumber: params.fnSerialNumber, cashReceiptId: params.cashReceiptId })}
-                                />
-                        </Route>
-                        <Route path="Cashbox">
-                            <IndexRoute component={Cashbox} />
-                            <Route path="Registration" component={Registration} >
-                                <IndexRoute component={CashboxApplication} />
-                                <Route path="Registration#cashbox-owner" component={CashboxOwner} />
-                                <Route path="Registration#cashbox-device" component={CashboxDevice} />
-                                <Route path="Registration#fiscal-storage" component={FiscalStorage} />
-                            </Route>
-                        </Route>
-
-                        <Redirect from="*" to="/"/>
+            <Router history={browserHistory}>
+                <Route path="/" component={Layout}>
+                    <IndexRoute component={Report}
+                        onEnter={() => store.dispatch({ type: `${ReportNamespace}.${Enter}` })}
+                        onLeave={() => store.dispatch({ type: `${ReportNamespace}.${Leave}` })} />
+                    <Route path="Statistics">
+                        <IndexRoute  component={StatisticsConnected}
+                                     onEnter={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsEnter}` })}
+                                     onLeave={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsLeave}` })} />
+                        <Route path="SalesPoint/:salesPointId" component={SalesPointStatisticsConnected}
+                               onEnter={({ params }) => store.dispatch({ type: `${SalesPointStatisticsNamespace}.${SalesPointStatisticsEnter}`, salesPointId: params.salesPointId })}
+                               onLeave={() => store.dispatch({ type: `${SalesPointStatisticsNamespace}.${SalesPointStatisticsLeave}` })} />
                     </Route>
-                </Router>
-            </div>
+                    <Route path="CashReceipts" component={CashReceiptsConnected}
+                        onEnter={() => store.dispatch({ type: `${CashReceiptsNamespace}.${CashReceiptsEnter}` })}
+                        onLeave={() => store.dispatch({ type: `${CashReceiptsNamespace}.${CashReceiptsLeave}` })} >
+                        <Route path=":fnSerialNumber/:cashReceiptId"
+                            component={CashReceiptViewerConnected}
+                            onEnter={({ params }) => store.dispatch({ type: `${CashReceiptViewerNamespace}.${CashReceiptViewerEnter}`, fnSerialNumber: params.fnSerialNumber, cashReceiptId: params.cashReceiptId })}
+                            />
+                    </Route>
+                    <Route path="Cashbox">
+                        <IndexRoute component={Cashbox} />
+                        <Route path="Registration" component={Registration} >
+                            <IndexRoute component={CashboxApplication} />
+                            <Route path="Registration#cashbox-owner" component={CashboxOwner} />
+                            <Route path="Registration#cashbox-device" component={CashboxDevice} />
+                            <Route path="Registration#fiscal-storage" component={FiscalStorage} />
+                        </Route>
+                    </Route>
+
+                    <Redirect from="*" to="/"/>
+                </Route>
+            </Router>
         );
     }
 }

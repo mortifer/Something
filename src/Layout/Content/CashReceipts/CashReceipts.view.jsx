@@ -121,7 +121,8 @@ function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, erro
                                     </tfoot>
                                 </table>
                             ) : (
-                                <div>ничего не найденно</div>
+                                cashReceiptsUpdating ? null :
+                                <div className="cashreceipts_notFound">Не нашлось подходящих чеков по данным условиям поиска</div>
                             )
                     }
                 </Loader>

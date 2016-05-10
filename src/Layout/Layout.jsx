@@ -10,7 +10,7 @@ class Layout extends React.Component {
         const { model }  = this.props.route;
 
         return (
-            <form>
+            <div>
                 <Header />
                 <div className="c-wrapper">
                     <div className="middle">
@@ -20,7 +20,7 @@ class Layout extends React.Component {
                         </Content>
                     </div>
                 </div>
-            </form>
+            </div>
         );
     }
 }
