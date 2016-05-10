@@ -87,9 +87,9 @@ class App extends React.Component {
                         </Route>
                         <Route path="CashReceipts" component={CashReceiptsConnected}
                             onEnter={() => store.dispatch({ type: `${CashReceiptsNamespace}.${CashReceiptsEnter}` })}>
-                            <Route path="CashReceipt"
+                            <Route path="CashReceipt/:fnSerialNumber/:cashReceiptId"
                                 component={CashReceiptViewerConnected}
-                                onEnter={({ query }) => store.dispatch({ type: `${CashReceiptViewerNamespace}.${CashReceiptViewerEnter}`, fnSerialNumber: "", cashReceiptId: "" })}
+                                onEnter={({ params }) => store.dispatch({ type: `${CashReceiptViewerNamespace}.${CashReceiptViewerEnter}`, fnSerialNumber: params.fnSerialNumber, cashReceiptId: params.cashReceiptId })}
                                 />
                         </Route>
                         <Route path="Cashbox">

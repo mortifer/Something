@@ -55,27 +55,33 @@ export default class OfdApi {
         });
     }
 
-    async getCashreceiptsBySalesPoint(from, to, salesPointId, anchorId)  {
+    async getCashreceiptsBySalesPoint(from, to, totalFrom, totalTo, isOnlyReturn, salesPointId, anchorId)  {
         return await this.catchError(async () => {
             var response = await axios.get(
                 this.prefix + "/v1/organizations/" +
                 this.organizationId + "/cashReceiptMetas/salesPoints/" + salesPointId +
                 "?from="+(from.toISOString().split("T"))[0] +
                 "&to="+ (to.toISOString().split("T"))[0] +
-                "&count=20" + 
+                "&count=20" +
+                (isOnlyReturn ? `&isOnlyReturn=${isOnlyReturn}` : "") +
+                (totalFrom ? `&totalFrom=${totalFrom}` : "") +
+                (totalTo ? `&totalTo=${totalTo}` : "") +
                 (anchorId ? `&anchor=${anchorId}` : "") );
             return response.data;
         });
     }
 
-    async getCashreceipts(from, to, anchorId) {
+    async getCashreceipts(from, to, totalFrom, totalTo, isOnlyReturn, anchorId) {
         return await this.catchError(async () => {
             var response = await axios.get(
                 this.prefix + "/v1/organizations/" +
                 this.organizationId + "/cashReceiptMetas/" +
                 "?from="+(from.toISOString().split("T"))[0] +
                 "&to="+ (to.toISOString().split("T"))[0] +
-                "&count=20" + 
+                "&count=20" +
+                (isOnlyReturn ? `&isOnlyReturn=${isOnlyReturn}` : "") +
+                (totalFrom ? `&totalFrom=${totalFrom}` : "") +
+                (totalTo ? `&totalTo=${totalTo}` : "") +
                 (anchorId ? `&anchor=${anchorId}` : ""));
             return response.data;
         });

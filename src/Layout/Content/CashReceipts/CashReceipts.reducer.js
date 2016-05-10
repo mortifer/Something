@@ -28,10 +28,10 @@ function * updateCashReceipts() {
             return;
         yield put({ type: CashReceiptsBeginUpdate });
         if (!form.salesPoint) {
-            cashReceipts = yield call(() => api.getCashreceipts(form.from, form.to))
+            cashReceipts = yield call(() => api.getCashreceipts(form.from, form.to, form.totalFrom, form.totalTo, form.isOnlyReturn))
         }
         else {
-            cashReceipts = yield call(() => api.getCashreceiptsBySalesPoint(form.from, form.to, form.salesPoint));
+            cashReceipts = yield call(() => api.getCashreceiptsBySalesPoint(form.from, form.to, form.totalFrom, form.totalTo, form.isOnlyReturn, form.salesPoint));
         }
         yield put({ type: CashReceiptsUpdated, cashReceipts: cashReceipts });
     }
@@ -50,10 +50,10 @@ function * retrieveCashReceiptsNextPage() {
         const currentCashReceipts = yield select(x => x.getIn(["cashReceipts", "items"]).toJS());
         const anchorId = currentCashReceipts[currentCashReceipts.length - 1].documentId;
         if (!form.salesPoint) {
-            cashReceipts = yield call(() => api.getCashreceipts(form.from, form.to, anchorId))
+            cashReceipts = yield call(() => api.getCashreceipts(form.from, form.to, form.totalFrom, form.totalTo, form.isOnlyReturn, anchorId))
         }
         else {
-            cashReceipts = yield call(() => api.getCashreceiptsBySalesPoint(form.from, form.to, form.salesPoint, anchorId));
+            cashReceipts = yield call(() => api.getCashreceiptsBySalesPoint(form.from, form.to, form.totalFrom, form.totalTo, form.isOnlyReturn, form.salesPoint, anchorId));
         }
         yield put({ type: CashReceiptsUpdated, cashReceipts: fromJS({ items: [...currentCashReceipts, ...cashReceipts.items], count: cashReceipts.count }) });
     }

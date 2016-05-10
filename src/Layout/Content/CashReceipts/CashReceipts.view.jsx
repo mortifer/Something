@@ -78,9 +78,11 @@ function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, erro
                 </div>
             </div>
             <div className="cashreceipts_filters_returns">
-                <Checkbox>Только чеки на возврат</Checkbox>
+                <Checkbox checked={form.isOnlyReturn} onChange={(e, value) =>{ onChange({ isOnlyReturn: value }); onCashReceiptsRequestUpdate(); }}>Только чеки на возврат</Checkbox>
             </div>
+
             {children}
+
             { error ?
                 <div className="validation validation__error">{error}</div> :
                 <Loader type="big" active={cashReceiptsUpdating} >
@@ -101,7 +103,7 @@ function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, erro
                                             <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
                                             {formatMoney(item.total, item.calculationType == "ReturnSell")}
                                             <td>
-                                                <Link to={`/CashReceipts/CashReceipt?fnSerialNumber=${item.fnSerialNumber}&documentId=${item.documentId}`} className="link">{item.number}</Link>
+                                                <Link to={`/CashReceipts/CashReceipt/${item.fnSerialNumber}/${item.documentId}`} className="link">{item.number}</Link>
                                                 {item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell"  ? <span>Возврат</span> : null}
                                             </td>
                                         </tr>

@@ -20,11 +20,11 @@ const scrollHandle = (enable) => {
 class Navigation extends React.Component {
 
     componentDidMount() {
-        scrollHandle(true);
+        //scrollHandle(true);
     }
 
     componentWillUnmount() {
-        scrollHandle(false);
+        //scrollHandle(false);
     }
 
     render(){

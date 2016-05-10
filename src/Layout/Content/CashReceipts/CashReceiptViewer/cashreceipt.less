@@ -1,0 +1,141 @@
+.cashReceipt {
+
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 500px;
+
+    padding: 50px;
+    background: #ffffff;
+    box-shadow: -4px 2px 4px 0 rgba(128, 128, 128, 0.1);
+    border-left: solid 1px #e3e3e3;
+
+    font-size: 14px;
+    line-height: 20px;
+
+    box-sizing: border-box;
+
+    &_header {
+        text-align: center;
+    }
+    &_title {
+        font-size: 19px;
+        margin: 0 0 5px 0;
+    }
+
+    &_list {
+        margin: 10px 0;
+        counter-reset: list;
+    }
+
+    &_item {
+
+        margin: 10px 0;
+        padding: 0 0 0 25px;
+        position: relative;
+
+        &:before {
+            counter-increment: list;
+            content: counter(list) + ". ";
+            position: absolute;
+            left: 0;
+        }
+
+        &__total {
+
+            padding: 0;
+
+            &:before {
+                display: none;
+            }
+        }
+
+        div + div {
+            display: flex;
+            white-space: nowrap;
+
+            span + span {
+                padding: 0 0 0 5px;
+            }
+
+            span:nth-child(2) {
+                overflow: hidden;
+                &:before {
+                    content: ".............................................................................................................................";
+                }
+            }
+        }
+
+    }
+
+    &_time {
+
+    }
+
+    &_total {
+        font-size: 18px;
+        margin: 20px 0 10px 0;
+
+        div {
+            display: flex;
+            white-space: nowrap;
+
+            span:nth-child(2) {
+                overflow: hidden;
+                &:before {
+                    content: ".............................................................................................................................";
+                    opacity: 0;
+                }
+            }
+        }
+
+    }
+
+    &_footer {
+        div {
+            display: flex;
+            white-space: nowrap;
+
+            > span {
+                width: 60px;
+            }
+        }
+    }
+
+
+
+    &_close {
+
+        position:absolute;
+        width: 26px;
+        height: 26px;
+        top: 20px;
+        right: 15px;
+        line-height: 0;
+        overflow: hidden;
+        opacity: 0.3;
+        cursor: pointer;
+        color: #404040;
+
+        transition: opacity 0.3s ease-in;
+
+        &:hover {
+            opacity: 0.6;
+        }
+
+        &:before {
+            content: "\00D7";
+            //content: "\E00E";
+            //font-family: "Icons";
+            font-size: 38px;
+            font-weight: 200;
+            top: 9px;
+            left: 1px;
+            position: relative;
+        }
+    }
+}
+
+
