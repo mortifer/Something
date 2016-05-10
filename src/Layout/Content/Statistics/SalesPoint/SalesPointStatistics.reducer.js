@@ -14,24 +14,14 @@ export const SalesPointStatisticsRequestUpdate = "SalesPointStatisticsRequestUpd
 const SalesPointStatisticsBeginUpdate = "SalesPointStatisticsBeginUpdate";
 const SalesPointStatisticsUpdated = "SalesPointStatisticsUpdated";
 
-function * updateSalesPointStatistics() {
+function * updateSalesPointStatistics(salesPointId) {
     var api = yield getOfdApi();
-
-    function getQueryVariable(variable){
-        var query = window.location.search.substring(1);
-        var vars = query.split("&");
-        for (var i=0;i<vars.length;i++) {
-            var pair = vars[i].split("=");
-            if(pair[0] == variable){return pair[1];}
-        }
-        return(false);
-    }
 
     try {
         let salesPointStatistics;
         const form = yield select(x => x.toJS().form);
         yield put({ type: SalesPointStatisticsBeginUpdate });
-        salesPointStatistics = yield call(() => api.getStatisticsBySalesPoint(form.from, form.to, getQueryVariable("salesPointId")));
+        salesPointStatistics = yield call(() => api.getStatisticsBySalesPoint(form.from, form.to, salesPointId));
         yield put({ type: SalesPointStatisticsUpdated, salesPointStatistics: salesPointStatistics });
     }
     catch (e) {
@@ -52,6 +42,6 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
             salesPointStatisticsUpdating: false
         }))
     .on(Leave, state => state.merge({ runRefresh: false }))
-    .on(Enter, perform(function* () {
-        yield* updateSalesPointStatistics();
+    .on(Enter, perform(function* ({salesPointId}) {
+        yield* updateSalesPointStatistics(salesPointId);
     }));

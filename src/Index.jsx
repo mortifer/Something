@@ -81,13 +81,13 @@ class App extends React.Component {
                             <IndexRoute  component={StatisticsConnected}
                                          onEnter={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsEnter}` })}
                                          onLeave={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsLeave}` })} />
-                            <Route path="SalesPointStatistics" component={SalesPointStatisticsConnected}
-                                   onEnter={() => store.dispatch({ type: `${SalesPointStatisticsNamespace}.${SalesPointStatisticsEnter}` })}
+                            <Route path="SalesPoint/:salesPointId" component={SalesPointStatisticsConnected}
+                                   onEnter={({ params }) => store.dispatch({ type: `${SalesPointStatisticsNamespace}.${SalesPointStatisticsEnter}`, salesPointId: params.salesPointId })}
                                    onLeave={() => store.dispatch({ type: `${SalesPointStatisticsNamespace}.${SalesPointStatisticsLeave}` })} />
                         </Route>
                         <Route path="CashReceipts" component={CashReceiptsConnected}
                             onEnter={() => store.dispatch({ type: `${CashReceiptsNamespace}.${CashReceiptsEnter}` })}>
-                            <Route path="CashReceipt/:fnSerialNumber/:cashReceiptId"
+                            <Route path=":fnSerialNumber/:cashReceiptId"
                                 component={CashReceiptViewerConnected}
                                 onEnter={({ params }) => store.dispatch({ type: `${CashReceiptViewerNamespace}.${CashReceiptViewerEnter}`, fnSerialNumber: params.fnSerialNumber, cashReceiptId: params.cashReceiptId })}
                                 />
