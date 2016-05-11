@@ -65,7 +65,13 @@ class CashReceipts extends React.Component {
                         />
                     </div>
                     <div className="cashreceipts_filters_cashiers">
-                        <Select disabled={true}/>
+                        <Select
+                            disabled={form.cashiersUpdating || cashReceiptsUpdating}
+                            items={form.cashiers}
+                            value={form.cashier}
+                            onChange={(e, value) => { onChange({ cashier: value }); onCashReceiptsRequestUpdate(); }}
+                        />
+
                     </div>
                     <div className="cashreceipts_filters_sums">
                         <span className="cashreceipts_filters_sumsFrom">Сумма от</span>

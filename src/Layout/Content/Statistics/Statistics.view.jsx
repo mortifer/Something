@@ -31,8 +31,9 @@ function BarChartInteractive(bind) {
         $(".statistics_list").append("<div class=\"cols_col_hoverContainer\"/>");
         $colsContainers.first().find(".cols_col").each( function(){
             $(".cols_col_hoverContainer").append("<div class=\"cols_col_hover\"/>");
+            console.log($(this).position());
             $(".cols_col_hoverContainer .cols_col_hover").last().css({
-                top: $(this).position().top,
+                top: $(this).parent().parent().position().top + $(this).parent().parent().height(),
                 bottom: 0,
                 left: $(this).position().left,
                 width: $(this).width()
@@ -72,6 +73,11 @@ class BarChart extends React.Component {
             isBarChartInteractive = true;
             BarChartInteractive(isBarChartInteractive);
         }
+    }
+
+    componentWillReceiveProps() {
+        BarChartInteractive(false);
+        BarChartInteractive(true);
     }
 
     componentWillUnmount() {

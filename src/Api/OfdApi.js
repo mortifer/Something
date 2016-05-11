@@ -55,7 +55,7 @@ export default class OfdApi {
         });
     }
 
-    async getCashreceiptsBySalesPoint(from, to, totalFrom, totalTo, isOnlyReturn, salesPointId, anchorId)  {
+    async getCashreceiptsBySalesPoint(from, to, totalFrom, totalTo, isOnlyReturn, cashier, salesPointId, anchorId)  {
         return await this.catchError(async () => {
             var response = await axios.get(
                 this.prefix + "/v1/organizations/" +
@@ -64,6 +64,7 @@ export default class OfdApi {
                 "&to="+ (to.toISOString().split("T"))[0] +
                 "&count=20" +
                 (isOnlyReturn ? `&isOnlyReturn=${isOnlyReturn}` : "") +
+                (cashier && cashier != 'Все кассиры' ? `&cashier=${cashier}` : "") +
                 (totalFrom ? `&totalFrom=${totalFrom}` : "") +
                 (totalTo ? `&totalTo=${totalTo}` : "") +
                 (anchorId ? `&anchor=${anchorId}` : "") );
@@ -71,7 +72,7 @@ export default class OfdApi {
         });
     }
 
-    async getCashreceipts(from, to, totalFrom, totalTo, isOnlyReturn, anchorId) {
+    async getCashreceipts(from, to, totalFrom, totalTo, isOnlyReturn, cashier, anchorId) {
         return await this.catchError(async () => {
             var response = await axios.get(
                 this.prefix + "/v1/organizations/" +
@@ -80,6 +81,7 @@ export default class OfdApi {
                 "&to="+ (to.toISOString().split("T"))[0] +
                 "&count=20" +
                 (isOnlyReturn ? `&isOnlyReturn=${isOnlyReturn}` : "") +
+                (cashier && cashier != 'Все кассиры' ? `&cashier=${cashier}` : "") +
                 (totalFrom ? `&totalFrom=${totalFrom}` : "") +
                 (totalTo ? `&totalTo=${totalTo}` : "") +
                 (anchorId ? `&anchor=${anchorId}` : ""));
@@ -107,7 +109,17 @@ export default class OfdApi {
             return allSalesPoints.concat(response.data);
         });
     }
-    
+
+    async getCashiers() {
+        const allCashiers = [{organizationId:"",id:"",name:"Все кассиры"}];
+        return await this.catchError(async () => {
+            var response = await axios.get(
+                this.prefix + "/v1/organizations/" +
+                this.organizationId + "/cashiers");
+            return allCashiers.concat(response.data);
+        });
+    }
+
     async getTasks() {
         return await this.catchError(async () => {
             var response = await axios.get(window.apiURLfake + "/getModel/Report/Tasks");

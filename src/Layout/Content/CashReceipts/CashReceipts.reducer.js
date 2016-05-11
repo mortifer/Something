@@ -13,6 +13,8 @@ export const DataRetrievingError = "DataRetrievingError";
 
 const SalesPointsUpdated = "SalesPointsUpdated";
 const SalesPointsBeginUpdate = "SalesPointsBeginUpdate";
+const CashiersUpdated = "CashiersUpdated";
+const CashiersBeginUpdate = "CashiersBeginUpdate";
 
 export const CashReceiptsRequestUpdate = "CashReceiptsRequestUpdate";
 export const CashReceiptsRequestNextPage = "CashReceiptsRequestNextPage";
@@ -29,10 +31,10 @@ function * updateCashReceipts() {
             return;
         yield put({ type: CashReceiptsBeginUpdate });
         if (!form.salesPoint) {
-            cashReceipts = yield call(() => api.getCashreceipts(form.from, form.to, form.totalFrom, form.totalTo, form.isOnlyReturn))
+            cashReceipts = yield call(() => api.getCashreceipts(form.from, form.to, form.totalFrom, form.totalTo, form.isOnlyReturn, form.cashier))
         }
         else {
-            cashReceipts = yield call(() => api.getCashreceiptsBySalesPoint(form.from, form.to, form.totalFrom, form.totalTo, form.isOnlyReturn, form.salesPoint));
+            cashReceipts = yield call(() => api.getCashreceiptsBySalesPoint(form.from, form.to, form.totalFrom, form.totalTo, form.isOnlyReturn, form.cashier, form.salesPoint));
         }
         yield put({ type: CashReceiptsUpdated, cashReceipts: cashReceipts });
     }
@@ -51,10 +53,10 @@ function * retrieveCashReceiptsNextPage() {
         const currentCashReceipts = yield select(x => x.getIn(["cashReceipts", "items"]).toJS());
         const anchorId = currentCashReceipts[currentCashReceipts.length - 1].documentId;
         if (!form.salesPoint) {
-            cashReceipts = yield call(() => api.getCashreceipts(form.from, form.to, form.totalFrom, form.totalTo, form.isOnlyReturn, anchorId))
+            cashReceipts = yield call(() => api.getCashreceipts(form.from, form.to, form.totalFrom, form.totalTo, form.isOnlyReturn, form.cashier, anchorId))
         }
         else {
-            cashReceipts = yield call(() => api.getCashreceiptsBySalesPoint(form.from, form.to, form.totalFrom, form.totalTo, form.isOnlyReturn, form.salesPoint, anchorId));
+            cashReceipts = yield call(() => api.getCashreceiptsBySalesPoint(form.from, form.to, form.totalFrom, form.totalTo, form.isOnlyReturn, form.cashier, form.salesPoint, anchorId));
         }
         yield put({ type: CashReceiptsUpdated, cashReceipts: fromJS({ items: [...currentCashReceipts, ...cashReceipts.items], count: cashReceipts.count }) });
     }
@@ -84,6 +86,7 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
             cashReceiptsUpdating: false,
             changedSinceLastUpdate: false
         }))
+
     .on(SalesPointsBeginUpdate, state => state.merge({ salesPointsUpdating: true, error: null}))
     .on(SalesPointsUpdated, (state, { salesPoints }) => state
         .merge({
@@ -112,6 +115,35 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
         }
         return state;
     })
+
+    .on(CashiersBeginUpdate, state => state.merge({ cashiersUpdating: true, error: null}))
+    .on(CashiersUpdated, (state, { cashiers }) => state
+        .merge({
+            cashiers: cashiers,
+            cashiersUpdating: false
+        }))
+    .on(CashiersUpdated, (state, { cashiers }) => {
+        var currentCashier = state.getIn(["form", "cashier"]);
+        if (!currentCashier) {
+            return spoiled(
+                state
+                    .setIn(["form", "cashier"], cashiers[0].name)
+                    .merge({ changedSinceLastUpdate: true })//,
+                    //updateCashReceipts);
+                );
+        }
+        else {
+            if (!cashiers.map(x => x.name).includes(currentCashier)) {
+                return spoiled(
+                    state
+                        .setIn(["form", "true"], cashiers[0].name)
+                        .merge({ changedSinceLastUpdate: true })//,
+                        //updateCashReceipts
+                    );
+            }
+        }
+        return state;
+    })
     .on(Enter, perform(function* () {
         var api = yield getOfdApi();
         const formData = yield { type: "LoadState", key: "CashReceipts" };
@@ -124,6 +156,10 @@ export default defineReducer(Map({ form: Map({ from: new Date(), to: new Date() 
         yield put({type: SalesPointsBeginUpdate});
         var salesPoints = yield call(() => api.getSalesPoints());
         yield put({type: SalesPointsUpdated, salesPoints: salesPoints});
+
+        yield put({type: CashiersBeginUpdate});
+        var cashiers = yield call(() => api.getCashiers());
+        yield put({type: CashiersUpdated, cashiers: cashiers});
     }))
     .on(Leave, (state) => state.merge({ changedSinceLastUpdate: true }));
 
