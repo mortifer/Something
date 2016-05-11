@@ -20,115 +20,130 @@ function formatMoney(money, isReturn) {
     return (<td>{ isReturn ? <span className="isReturn" />:null }{parseInt(tmp[0]).toLocaleString()}<span>,{tmp[1]}</span></td>);
 }
 
-function CashReceipts({ form, cashReceipts, cashReceiptsUpdating, dispatch, error, children }) {
-    const onChange = data => dispatch({ type: Change, data: data });
-    const onCashReceiptsRequestUpdate = () => dispatch({ type: CashReceiptsRequestUpdate });
-    const onNextPage = () => dispatch({ type: CashReceiptsRequestNextPage });
+class CashReceipts extends React.Component {
 
-    return (
-        <div className="cashreceipts">
-            <h2 className="cashreceipts_title">Чеки</h2>
-            <div className="cashreceipts_searchType">
-                <span className="-active">Все чеки</span>
-                <span><a href="#" className="link">Поиск по номеру</a></span>
-            </div>
-            <div className="cashreceipts_filters">
-                <div className="cashreceipts_filters_dates">
-                    <DatePicker
-                        disabled={cashReceiptsUpdating}
-                        defaultValue={new Date()}
-                        value={form.from}
-                        onChange={(e, value) => { onChange({ from: value });  onCashReceiptsRequestUpdate(); }} />
-                    <span className="cashreceipts_filters_delimiter">&mdash;</span>
-                    <DatePicker
-                        disabled={cashReceiptsUpdating}
-                        defaultValue={new Date()}
-                        value={form.to}
-                        onChange={(e, value) => { onChange({ to: value });  onCashReceiptsRequestUpdate(); }} />
-                </div>
-                <div className="cashreceipts_filters_salesPoints">
-                    <Select
-                        disabled={form.salesPointsUpdating || cashReceiptsUpdating}
-                        items={form.salesPoints}
-                        value={form.salesPoint}
-                        onChange={(e, value) => { onChange({ salesPoint: value }); onCashReceiptsRequestUpdate(); }}
-                    />
-                </div>
-                <div className="cashreceipts_filters_cashiers">
-                    <Select disabled={true} />
-                </div>
-                <div className="cashreceipts_filters_sums">
-                    <span className="cashreceipts_filters_sumsFrom">Сумма от</span>
-                    <Input
-                        disabled={cashReceiptsUpdating}
-                        width={100}
-                        placeholder="0,00"
-                        value={form.totalFrom || ""}
-                        onBlur={onCashReceiptsRequestUpdate}
-                        onChange={(e, value) => onChange({ totalFrom: value })} />
-                    <span className="cashreceipts_filters_sumsTo">до</span>
-                    <Input
-                        disabled={cashReceiptsUpdating}
-                        width={100}
-                        placeholder="0,00"
-                        value={form.totalTo || ""}
-                        onBlur={onCashReceiptsRequestUpdate}
-                        onChange={(e, value) => onChange({ totalTo: value })} />
-                    <span className="rur">₽</span>
-                </div>
-            </div>
-            <div className="cashreceipts_filters_returns">
-                <Checkbox checked={form.isOnlyReturn} onChange={(e, value) =>{ onChange({ isOnlyReturn: value }); onCashReceiptsRequestUpdate(); }}>Только чеки на возврат</Checkbox>
-            </div>
+    childrenMounted(item) {
+        this.refs.cashreceiptsContainer ?
+            (this.refs.cashreceiptsContainer.style.minHeight = item ? (
+                item.getElementsByClassName("cashReceipt_content")[0] ?
+                    (item.getElementsByClassName("cashReceipt_content")[0].getBoundingClientRect().height - 80) + "px" : "auto") : "auto") : null
+    }
 
-            {children}
+    render() {
+        const {form, cashReceipts, cashReceiptsUpdating, dispatch, error, children} = this.props;
+        const onChange = data => dispatch({type: Change, data: data});
+        const onCashReceiptsRequestUpdate = () => dispatch({type: CashReceiptsRequestUpdate});
+        const onNextPage = () => dispatch({type: CashReceiptsRequestNextPage});
 
-            { error ?
-                <div className="validation validation__error">{error}</div> :
-                <Loader type="big" active={cashReceiptsUpdating} >
-                    {
-                        cashReceipts.items && cashReceipts.items.length ?
-                            (
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <td>Время</td>
-                                        <td>Сумма, <span className="rur">₽</span></td>
-                                        <td>№ чека</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {cashReceipts.items.map((item, i) => (
-                                        <tr key={i}>
-                                            <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
-                                            {formatMoney(item.total, item.calculationType == "ReturnSell")}
+        return (
+            <div className="cashreceipts" ref="cashreceiptsContainer">
+                <h2 className="cashreceipts_title">Чеки</h2>
+                <div className="cashreceipts_searchType">
+                    <span className="-active">Все чеки</span>
+                    <span><a href="#" className="link">Поиск по номеру</a></span>
+                </div>
+                <div className="cashreceipts_filters">
+                    <div className="cashreceipts_filters_dates">
+                        <DatePicker
+                            disabled={cashReceiptsUpdating}
+                            defaultValue={new Date()}
+                            value={form.from}
+                            onChange={(e, value) => { onChange({ from: value });  onCashReceiptsRequestUpdate(); }}/>
+                        <span className="cashreceipts_filters_delimiter">&mdash;</span>
+                        <DatePicker
+                            disabled={cashReceiptsUpdating}
+                            defaultValue={new Date()}
+                            value={form.to}
+                            onChange={(e, value) => { onChange({ to: value });  onCashReceiptsRequestUpdate(); }}/>
+                    </div>
+                    <div className="cashreceipts_filters_salesPoints">
+                        <Select
+                            disabled={form.salesPointsUpdating || cashReceiptsUpdating}
+                            items={form.salesPoints}
+                            value={form.salesPoint}
+                            onChange={(e, value) => { onChange({ salesPoint: value }); onCashReceiptsRequestUpdate(); }}
+                        />
+                    </div>
+                    <div className="cashreceipts_filters_cashiers">
+                        <Select disabled={true}/>
+                    </div>
+                    <div className="cashreceipts_filters_sums">
+                        <span className="cashreceipts_filters_sumsFrom">Сумма от</span>
+                        <Input
+                            disabled={cashReceiptsUpdating}
+                            width={100}
+                            placeholder="0,00"
+                            value={form.totalFrom || ""}
+                            onBlur={onCashReceiptsRequestUpdate}
+                            onChange={(e, value) => onChange({ totalFrom: value })}/>
+                        <span className="cashreceipts_filters_sumsTo">до</span>
+                        <Input
+                            disabled={cashReceiptsUpdating}
+                            width={100}
+                            placeholder="0,00"
+                            value={form.totalTo || ""}
+                            onBlur={onCashReceiptsRequestUpdate}
+                            onChange={(e, value) => onChange({ totalTo: value })}/>
+                        <span className="rur">₽</span>
+                    </div>
+                </div>
+                <div className="cashreceipts_filters_returns"> 
+                    <Checkbox checked={form.isOnlyReturn}
+                              onChange={(e, value) =>{ onChange({ isOnlyReturn: value }); onCashReceiptsRequestUpdate(); }}>Только чеки на возврат</Checkbox>
+                </div>
+
+                <div ref={::this.childrenMounted}>{children}</div>
+
+                { error ?
+                    <div className="validation validation__error">{error}</div> :
+                    <Loader type="big" active={cashReceiptsUpdating}>
+                        {
+                            cashReceipts.items && cashReceipts.items.length ?
+                                (
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <td>Время</td>
+                                            <td>Сумма, <span className="rur">₽</span></td>
+                                            <td>№ чека</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {cashReceipts.items.map((item, i) => (
+                                            <tr key={i}>
+                                                <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
+                                                {formatMoney(item.total, item.calculationType == "ReturnSell")}
+                                                <td>
+                                                    <Link to={`/CashReceipts/${item.fnSerialNumber}/${item.documentId}`}
+                                                          className="link">{item.number}</Link>
+                                                    {item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell" ?
+                                                        <span>Возврат</span> : null}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td colSpan="2">{cashReceipts.items.length} из {cashReceipts.count}</td>
                                             <td>
-                                                <Link to={`/CashReceipts/${item.fnSerialNumber}/${item.documentId}`} className="link">{item.number}</Link>
-                                                {item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell"  ? <span>Возврат</span> : null}
+                                                {cashReceipts.items.length < cashReceipts.count
+                                                    ? <a className="link" onClick={onNextPage}>Ещё 20 чеков</a>
+                                                    : null}
                                             </td>
                                         </tr>
-                                    ))}
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <td colSpan="2">{cashReceipts.items.length} из {cashReceipts.count}</td>
-                                        <td>
-                                            {cashReceipts.items.length < cashReceipts.count
-                                                ? <a className="link" onClick={onNextPage}>Ещё 20 чеков</a>
-                                                : null}
-                                        </td>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            ) : (
+                                        </tfoot>
+                                    </table>
+                                ) : (
                                 cashReceiptsUpdating ? null :
-                                <div className="cashreceipts_notFound">Не нашлось подходящих чеков по данным условиям поиска</div>
+                                    <div className="cashreceipts_notFound">
+                                        Не нашлось подходящих чеков по данным условиям поиска</div>
                             )
-                    }
-                </Loader>
-            }
-        </div>
-    );
+                        }
+                    </Loader>
+                }
+            </div>
+        );
+    }
 }
 
 export default CashReceipts;

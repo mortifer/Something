@@ -39,7 +39,7 @@
             font-weight: 300;
         }
         span {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 300;
             color: #606060;
         }
@@ -54,6 +54,9 @@
     height: 185px;
     display: flex;
     align-items: flex-end;
+    justify-content: flex-start;
+    font-size: 14px;
+    font-weight: normal;
 
     &_col {
         background-color: #ffdfaa;
@@ -110,6 +113,16 @@
     }
 
     &__week &_col {
-        width: 100px;
+        //width: 100px;
+        flex-basis: 100/7%
     }
+
+    .loop( @index ) when ( @index < 32 ) {
+        .loop( @index + 1 );
+        &__@{index} &_col {
+            flex-basis: ( percentage(1 / @index) );
+        }
+    }
+
+    .loop(0)
 }

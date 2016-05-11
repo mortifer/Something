@@ -3,6 +3,8 @@ import {Link, IndexLink} from "react-router";
 
 import "./statistics.less";
 
+import {Motion, spring} from 'react-motion';
+
 import DatePicker from "ui/DatePicker";
 import Loader from "ui/Loader";
 
@@ -11,15 +13,45 @@ Upgrades.enableHeight34();
 
 import { Change, StatisticsRequestUpdate } from "./Statistics.reducer"
 
-function formatMoney(money) {
+function formatMoney(money, tag, showRur) {
     var tmp = money.toFixed(2).split(".");
-    return (<td>{parseInt(tmp[0]).toLocaleString()}<span>,{tmp[1]}</span></td>);
+    return (tag == "div" ?
+        <div>{parseInt(tmp[0]).toLocaleString()}<span>,{tmp[1]}{showRur ? <span className="rur">&nbsp;₽</span> : null}</span></div>:
+        <td>{parseInt(tmp[0]).toLocaleString()}<span>,{tmp[1]}{showRur ? <span className="rur">&nbsp;₽</span> : null}</span></td>);
+}
+
+class BarChart extends React.Component {
+    render() {
+        var { data, renderX = x => x } = this.props;
+        var maxValue = data.map(item => item.y).reduce((x, y) => Math.max(x, y), 0);
+        var colsClass = "cols cols__" + data.length;
+        return (
+            <div className={colsClass}>
+                {data.map((item, i) => (
+                    <Motion key={i} defaultStyle={{h: 0}} style={{h: spring((item.y / maxValue) * 100)}}>
+                        {({h}) => (<div className="cols_col" style={{height: h + '%'}}>
+                            {renderX(item.x)}
+                        </div>)}
+                    </Motion>
+                ))}
+            </div>
+        );
+    }
 }
 
 function Statistics({ form, statistics, statisticsUpdating, dispatch, error }) {
     const onChange = data => dispatch({ type: Change, data: data });
     const onStatisticsRequestUpdate = () => dispatch({ type: StatisticsRequestUpdate });
-    
+
+    const monthNames = [ "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря" ]
+    const weekDaysNames = [ "воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота" ]
+
+    //const todayItem = table[table.length-1]
+    //const yesterdayItem = table[table.length-2]
+
+    const days = error ? 0 : (parseInt(new Date(new Date(form.to).toISOString().split("T")[0]).getTime()) -
+                 parseInt(new Date(new Date(form.from).toISOString().split("T")[0]).getTime())) / (24*60*60*1000)
+
     return (
         <div className="statistics">
             <h2 className="statistics_title">Статистика</h2>
@@ -42,42 +74,73 @@ function Statistics({ form, statistics, statisticsUpdating, dispatch, error }) {
             { error ?
                 <div className="validation validation__error">{error}</div> :
                 <Loader type="big" active={statisticsUpdating} >
-                    <table>
-                        <tbody>
-                        <tr>
-                            <td><div>Органисьон тоталь сумасьон</div></td>
-                            { formatMoney(statistics.reduce( (p,c) => ( p+c.total ), 0)) }
-                        </tr>
-                        </tbody>
-                    </table>
-                    { statistics.length ?(
-                        <table>
-                            <thead>
-                            <tr>
-                                <td></td>
-                                <td>Выручка, <span className="rur">₽</span></td>
-                                <td>Чеки</td>
-                                <td>Средний чек, <span className="rur">₽</span></td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {statistics.map((item, i) => (
-                                <tr key={i}>
-                                    <td>
-                                        <div><Link to={`/Statistics/SalesPoint/${item.groupId}`} className="link">{item.groupName}</Link></div>
-                                    </td>
-                                    {formatMoney(item.total)}
-                                    <td>{item.count.toLocaleString()}</td>
-                                    {formatMoney(item.total/item.count)}
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
+                    <div className="statistics_summary_title">
+                        По всей организации
+                        {
+                            formatMoney(
+                                statistics.map((c) => (
+                                        c.reduce( (p,c) => ({ total: p.total + c.total }),{ total: 0 } )
+                                    )).reduce( (p,c) => ( p+c.total ), 0 ),
+                                "div",
+                                true
+                            )
+                        }
+                    </div>
+                    {
+                        statistics.length ?
+                            days >= 1 ?
+                                <div className="statistics_list">
+                                    {statistics.map((item, i) => (
+                                        <div key={i} className="statistics_item">
+                                            <Link to={`/Statistics/SalesPoint/${item[0].groupId}`} className="link">{item[0].groupName}</Link>
+                                            <div>
+                                                <BarChart
+                                                    data={item.map(x => ({ x: new Date(x.date), y: x.total }))}
+                                                    renderX={x => <span>{x.getDate() + " " + monthNames[x.getMonth()]}<span>, {weekDaysNames[x.getDay()]}</span></span>} />
 
-
-                    ) : (
-                        <div>:(</div>
-                    )}
+                                                { formatMoney(
+                                                    item.reduce((p,c) => ({ total: p.total + c.total }),{ total: 0 } ).total
+                                                    , "div", true) }
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                :
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td>Выручка, <span className="rur">₽</span></td>
+                                        <td>Чеки</td>
+                                        <td>Средний чек, <span className="rur">₽</span></td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {statistics.map((c) => ( c.reduce((p,c) => ({
+                                             total: p.total + c.total,
+                                             count: p.count + c.count,
+                                             groupId: c.groupId,
+                                             groupName: c.groupName
+                                         }),{
+                                             total: 0,
+                                             count: 0,
+                                             groupId: "",
+                                             groupName: ""
+                                         }))).map((item, i) => (
+                                        <tr key={i}>
+                                            <td>
+                                                <div><Link to={`/Statistics/SalesPoint/${item.groupId}`} className="link">{item.groupName}</Link></div>
+                                            </td>
+                                            {formatMoney(item.total)}
+                                            <td>{item.count.toLocaleString()}</td>
+                                            {formatMoney(item.total/item.count)}
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                            :
+                            <div>что-то пошло не так</div>
+                    }
                 </Loader>
             }
         </div>

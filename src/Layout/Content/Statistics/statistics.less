@@ -2,6 +2,61 @@
 
     height: 100%;
 
+    &_summary_title {
+        color: #606060;
+        position: absolute;
+        top: -110px;
+        right: 0;
+        text-align: right;
+        > div {
+            font-size: 36px;
+            font-weight: 300;
+            color: #333333;
+            margin: 25px 0;
+            > span {
+                font-size: 26px;
+                color: #606060;
+            }
+        }
+    }
+
+    &_list {
+
+    }
+
+    &_item {
+        margin: 0 0 70px 0;
+        font-size: 21px;
+        font-weight: 300;
+
+        &:last-child {
+            margin: 0;
+        }
+        > div {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+
+            > div:last-child {
+                padding: 0 0 0 20px;
+                font-size: 25px;
+                > span {
+                    font-size: 20px;
+                    font-weight: 300;
+                    color: #606060;
+                }
+
+            }
+        }
+
+        .cols {
+            margin-top: 20px;
+            height: 90px;
+            width: 80%;
+        }
+
+    }
+
     &_filters {
         margin: 30px 0;
         display: flex;
@@ -52,8 +107,8 @@
     }
 
     tbody td {
-        padding-top: 18px;
-        padding-bottom: 22px;
+        padding-top: 28px;
+        padding-bottom: 32px;
         font-size: 25px;
         vertical-align: top;
         div {
@@ -61,7 +116,7 @@
             font-weight: 300;
         }
         span {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 300;
             color: #606060;
         }
@@ -103,7 +158,8 @@
                 padding: 0 0 0 40px;
                 font-size: 25px;
                 > span {
-                    font-size: 18px;
+                    font-size: 20px;
+                    font-weight: 300;
                     color: #606060;
                 }
             }

@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
 
-import "../statistics.less";
-
 import DatePicker from "ui/DatePicker";
 import Loader from "ui/Loader";
 
