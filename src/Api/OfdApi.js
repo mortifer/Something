@@ -122,15 +122,38 @@ export default class OfdApi {
 
     async getTasks() {
         return await this.catchError(async () => {
-            var response = await axios.get(window.apiURLfake + "/getModel/Report/Tasks");
-            return response.data;
+            //var response = await axios.get(window.apiURLfake + "/getModel/Report/Tasks");
+            //return response.data;
+            return Math.random() > 0.5 ?
+                    [
+                        { text: "Продлить обслуживание у оператора фискальных данных", tillDate: new Date(2016, 3, 15) },
+                        { text: "Перерегистрировать кассу «Павильон на Сурикова»", tillDate: new Date(2016, 3, 27) },
+                        { text: "Сделайте уже что-нибудь", tillDate: new Date(2016, 3, 30) }
+                    ]
+                    :
+                    [
+                        { text: "Продлить обслуживание у оператора фискальных данных", tillDate: new Date(2016, 3, 15) },
+                        { text: "Перерегистрировать кассу «Павильон на Сурикова»", tillDate: new Date(2016, 3, 27) },
+                    ]
+
         });
     }
 
     async getNotifications() {
         return await this.catchError(async () => {
-            var response = await axios.get(window.apiURLfake + "/getModel/Report/Notifications");
-            return response.data;
+            //var response = await axios.get(window.apiURLfake + "/getModel/Report/Notifications");
+            //return response.data;
+
+            return Math.random() > 0.5 ?
+                    [
+                        { text: "Касса «№ 2 на 8 марта»: получена регистрационная карта" }
+                    ]
+                    :
+                    [
+                        { text: "Касса «№ 2 на 8 марта»: получена регистрационная карта" },
+                        { text: "Что-то произошло..." },
+                        { text: "Тысяча уведомлений, сударь!" }
+                    ]
         });
     }
 }
