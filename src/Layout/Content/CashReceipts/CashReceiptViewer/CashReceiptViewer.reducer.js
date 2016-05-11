@@ -2,7 +2,7 @@ import { Map, fromJS } from "immutable";
 import { defineReducer, perform } from "reelm/fluent";
 import { put, call } from "reelm/effects";
 
-import { getOfdApi } from "../../../../Effects"
+import { getOfdApi } from "../../../../Effects";
 
 export const Enter = "Enter";
 export const CashReceiptLoaded = "CashReceiptLoaded";

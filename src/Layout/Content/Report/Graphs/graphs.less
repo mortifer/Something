@@ -66,46 +66,63 @@
         height: 0;
         position: relative;
         border-right: solid 1px rgba(255, 255, 255, 0.25);
+        z-index: 2;
 
-        > span {
-            position: absolute;
-            bottom: -25px;
-            opacity: 0;
-            white-space: nowrap;
+        a {
+            display: block;
+            height: 100%;
+            color: #303030;
+
             > span {
-                display: none;
+                position: absolute;
+                bottom: -25px;
+                opacity: 0;
+                white-space: nowrap;
+                > span {
+                    display: none;
+                }
             }
+
         }
 
         &:first-child,
         &:last-child {
-            > span {
-                opacity: 1;
+            a {
+                > span {
+                    opacity: 1;
+                }
             }
         }
 
         &:last-child {
             border: none;
-            > span {
-                right: 0;
+            a {
+                > span {
+                    right: 0;
+                }
             }
         }
 
+        &.-hover,
         &:hover {
             background-image: linear-gradient(to top, #FF9c00, #FFD395);
             border: none;
             cursor: pointer;
 
-            > span {
-                opacity: 1;
+            a {
                 > span {
-                    display: inline;
+                    opacity: 1;
+                    > span {
+                        display: inline;
+                    }
                 }
             }
 
             &:last-child {
-                > span {
-                    left: 0;
+                a {
+                    > span {
+                        left: 0;
+                    }
                 }
             }
         }
@@ -115,6 +132,16 @@
     &__week &_col {
         //width: 100px;
         flex-basis: 100/7%
+    }
+
+    &_col_hover {
+        background: rgba(255, 152, 59, 0.1);
+        position: absolute;
+        z-index: 1;
+        opacity: 0;
+        &.-hover {
+            opacity: 1;
+        }
     }
 
     .loop( @index ) when ( @index < 32 ) {

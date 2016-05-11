@@ -16,27 +16,45 @@ export const Statistics = "Statistics";
 export const SalesPointStatistics = "SalesPointStatistics";
 export const CashReceiptViewer = "CashReceiptViewer";
 
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair[0] == variable) {
+            return pair[1];
+        }
+    }
+    return (false);
+}
+
 export default defineReducer(Map())
-    .scopedOver(Report, ["report"], reportReducer)
-    .scopedOver(CashReceipts, ["cashReceipts"], cashReceiptsReducer)
-    .scopedOver(CashReceiptViewer, ["cashReceiptViewer"], cashReceiptViewerReducer)
-    .scopedOver(Statistics, ["statistics"], statisticsReducer)
-    .scopedOver(SalesPointStatistics, ["SalesPointStatistics"], SalesPointStatisticsReducer)
-    .mapEffects(x => {
-        if (x.type === "GetOfdApi") {
-            return call(function* () { 
-                return new OfdApi(window.apiURL, window.organizationId);
-            });
-        }
-        if (x.type === "SaveState") {
-            return call(function* () {
-                window.localStorage.setItem(x.key, JSON.stringify(x.value));
-            });
-        }
-        if (x.type === "LoadState") {
-            return call(function* () {
-                return JSON.parse(window.localStorage.getItem(x.key));
-            });
-        }
-        return x;
-    })
+.scopedOver(Report, ["report"], reportReducer)
+.scopedOver(CashReceipts, ["cashReceipts"], cashReceiptsReducer)
+.scopedOver(CashReceiptViewer, ["cashReceiptViewer"], cashReceiptViewerReducer)
+.scopedOver(Statistics, ["statistics"], statisticsReducer)
+.scopedOver(SalesPointStatistics, ["SalesPointStatistics"], SalesPointStatisticsReducer)
+.mapEffects(x => {
+    if (x.type === "GetOfdApi") {
+        return call(function* () {
+            return new OfdApi(window.apiURL, window.organizationId);
+        });
+    }
+    if (x.type === "SaveState") {
+        return call(function* () {
+            window.localStorage.setItem(x.key, JSON.stringify(x.value));
+        });
+    }
+    if (x.type === "LoadState") {
+        return call(function* () {
+            const obj = JSON.parse(window.localStorage.getItem(x.key))
+            if (window.location.search){
+                if (obj.from) obj.from = getQueryVariable("from")
+                if (obj.to) obj.to = getQueryVariable("to")
+                history.replaceState(history.previous , "", window.location.toString().split("?")[0]);
+            }
+            return obj;
+        });
+    }
+    return x;
+})

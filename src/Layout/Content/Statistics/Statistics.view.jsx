@@ -20,7 +20,68 @@ function formatMoney(money, tag, showRur) {
         <td>{parseInt(tmp[0]).toLocaleString()}<span>,{tmp[1]}{showRur ? <span className="rur">&nbsp;₽</span> : null}</span></td>);
 }
 
+var isBarChartInteractive = false;
+var BarChartInteractiveCount = 0;
+function BarChartInteractive(bind) {
+    var $colsContainers = $(".cols");
+    var $cols = $colsContainers.find(".cols_col");
+    var index;
+
+    if (bind) {
+        $(".statistics_list").append("<div class=\"cols_col_hoverContainer\"/>");
+        $colsContainers.first().find(".cols_col").each( function(){
+            $(".cols_col_hoverContainer").append("<div class=\"cols_col_hover\"/>");
+            $(".cols_col_hoverContainer .cols_col_hover").last().css({
+                top: $(this).position().top,
+                bottom: 0,
+                left: $(this).position().left,
+                width: $(this).width()
+            })
+        });
+
+        $cols.each( function(){
+            $(this).bind("mouseenter", function(){
+                index = 0;
+                $(this).addClass("-hover");
+                $(this).parents(".cols").find(".cols_col").each( function(i){
+                    if ($(this).hasClass("-hover"))
+                        index = i + 1
+                })
+                $colsContainers.find(".cols_col:nth-child(" + index + ")").addClass("-hover");
+                $(".cols_col_hover:nth-child(" + index + ")").addClass("-hover");
+            });
+            $(this).bind("mouseleave", function(){
+                $cols.removeClass("-hover");
+                $(".cols_col_hover").removeClass("-hover");
+            });
+        });
+    } else {
+        $cols.unbind();
+        $(".cols_col_hoverContainer").remove();
+    }
+}
+
 class BarChart extends React.Component {
+    componentWillMount() {
+        BarChartInteractiveCount++;
+    }
+
+    componentDidMount() {
+        BarChartInteractiveCount--;
+        if (!isBarChartInteractive && !BarChartInteractiveCount) {
+            isBarChartInteractive = true;
+            BarChartInteractive(isBarChartInteractive);
+        }
+    }
+
+    componentWillUnmount() {
+        if (isBarChartInteractive) {
+            isBarChartInteractive = false;
+            BarChartInteractive(isBarChartInteractive);
+            BarChartInteractiveCount = 0;
+        }
+    }
+
     render() {
         var { data, renderX = x => x } = this.props;
         var maxValue = data.map(item => item.y).reduce((x, y) => Math.max(x, y), 0);
@@ -30,7 +91,7 @@ class BarChart extends React.Component {
                 {data.map((item, i) => (
                     <Motion key={i} defaultStyle={{h: 0}} style={{h: spring((item.y / maxValue) * 100)}}>
                         {({h}) => (<div className="cols_col" style={{height: h + '%'}}>
-                            {renderX(item.x)}
+                            <a>{renderX(item.x)}</a>
                         </div>)}
                     </Motion>
                 ))}

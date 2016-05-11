@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 //import popperJS from "popper.js";
 
 import "./graphs.less";
@@ -14,13 +15,20 @@ class BarChart extends React.Component {
     render() {
         var { data, renderX = x => x } = this.props;
         var maxValue = data.map(item => item.y).reduce((x, y) => Math.max(x, y), 0);
+        //var url = "/Statistics/?from=" + data.x;
         return (
-            <div className="cols cols__week">
+            <div  className="cols cols__week">
                 {data.map((item, i) => (
                     <Motion key={i} defaultStyle={{h: 0}} style={{h: spring((item.y / maxValue) * 100)}}>
-                        {({h}) => (<div className="cols_col" style={{height: h + '%'}}>
-                            {renderX(item.x)}
-                        </div>)}
+                        {({h}) => {
+                            const shortDate = new Date(item.x).toISOString().split("T")[0]
+                            const url = "/Statistics/?from=" + shortDate + "&to=" + shortDate;
+                            return (
+                                <div className="cols_col" style={{height: h + '%'}}>
+                                    <Link to={url}>{renderX(item.x)}</Link>
+                                </div>
+                            )
+                        }}
                     </Motion>
                 ))}
             </div>
