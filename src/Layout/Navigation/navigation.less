@@ -32,25 +32,41 @@
             left: 0;
             background: url("sprite.png") 0 0 no-repeat;
 
-            .-active& {
-                background-position-x: -100px;
-            }
+            //.-active& {
+                //background-position-x: -100px;
+            //}
         }
 
         &__report:before {
-            background-position-y: 0;
+            //background-position-y: 0;
+            background-position: 0 0;
+            .-active& {
+                background-position: -100px 0;
+            }
         }
 
         &__stat:before {
-            background-position-y: -150px;
+            //background-position-y: -150px;
+            background-position: 0 -150px;
+            .-active& {
+                background-position: -100px -150px;
+            }
         }
 
         &__cashbox:before {
-            background-position-y: -300px;
+            //background-position-y: -300px;
+            background-position: 0 -300px;
+            .-active& {
+                background-position: -100px -300px;
+            }
         }
 
         &__cashReceipts:before {
-            background-position-y: -450px;
+            //background-position-y: -450px;
+            background-position-y: 0 -450px;
+            .-active& {
+                background-position: -100px -450px;
+            }
         }
 
         &:hover {
