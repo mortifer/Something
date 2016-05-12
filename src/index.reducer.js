@@ -5,15 +5,17 @@ import { call } from "reelm/effects";
 import OfdApi from "./Api/OfdApi";
 
 import reportReducer from "./Layout/Content/Report/Report.reducer";
-import cashReceiptsReducer from "./Layout/Content/CashReceipts/CashReceipts.reducer";
 import statisticsReducer from "./Layout/Content/Statistics/Statistics.reducer";
 import SalesPointStatisticsReducer from "./Layout/Content/Statistics/SalesPoint/SalesPointStatistics.reducer";
+import cashReceiptsReducer from "./Layout/Content/CashReceipts/CashReceipts.reducer";
+import cashReceiptsByNumberReducer from "./Layout/Content/CashReceipts/CashReceiptsByNumber.reducer";
 import cashReceiptViewerReducer from './Layout/Content/CashReceipts/CashReceiptViewer/CashReceiptViewer.reducer';
 
 export const Report = "Report";
-export const CashReceipts = "CashReceipts";
 export const Statistics = "Statistics";
 export const SalesPointStatistics = "SalesPointStatistics";
+export const CashReceipts = "CashReceipts";
+export const CashReceiptsByNumber = "CashReceiptsByNumber";
 export const CashReceiptViewer = "CashReceiptViewer";
 
 function getQueryVariable(variable) {
@@ -30,10 +32,12 @@ function getQueryVariable(variable) {
 
 export default defineReducer(Map())
 .scopedOver(Report, ["report"], reportReducer)
-.scopedOver(CashReceipts, ["cashReceipts"], cashReceiptsReducer)
-.scopedOver(CashReceiptViewer, ["cashReceiptViewer"], cashReceiptViewerReducer)
 .scopedOver(Statistics, ["statistics"], statisticsReducer)
 .scopedOver(SalesPointStatistics, ["SalesPointStatistics"], SalesPointStatisticsReducer)
+.scopedOver(CashReceipts, ["cashReceipts"], cashReceiptsReducer)
+.scopedOver(CashReceiptsByNumber, ["cashReceiptsByNumber"], cashReceiptsByNumberReducer)
+.scopedOver(CashReceiptViewer, ["cashReceiptViewer"], cashReceiptViewerReducer)
+
 .mapEffects(x => {
     if (x.type === "GetOfdApi") {
         return call(function* () {

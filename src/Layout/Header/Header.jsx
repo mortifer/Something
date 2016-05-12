@@ -198,8 +198,8 @@ class Header extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <Link to="/?" className="header_support">Помощь</Link>
-                        <Link to="/?" className="header_account">Мстислав Ростропович</Link>
+                        <a to="" className="header_support">Помощь</a>
+                        <a to="" className="header_account">Мстислав Ростропович</a>
                         <span className="header_logout"><Link to="/logout">Выйти</Link></span>
                     </div>
 

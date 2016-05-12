@@ -35,7 +35,7 @@ class Navigation extends React.Component {
                 <div className="navigation_list">
                     <IndexLink to="/"  className="navigation_item navigation_item__report" activeClassName="-active">Главная</IndexLink>
                     <Link to="/Statistics" className="navigation_item navigation_item__stat" activeClassName="-active">Статистика</Link>
-                    <Link to="/CashReceipts" className="navigation_item navigation_item__cashReceipts" activeClassName="-active">Чеки</Link>
+                    <Link to="/CashReceipts/Common" className="navigation_item navigation_item__cashReceipts" activeClassName="-active">Чеки</Link>
                     {/*<Link to="/cashbox" className="navigation_item navigation_item__cashbox" activeClassName="-active">Кассы</Link>*/}
                 </div>
             </div>

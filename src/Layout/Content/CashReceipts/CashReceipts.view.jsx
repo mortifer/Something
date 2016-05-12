@@ -22,13 +22,6 @@ function formatMoney(money, isReturn) {
 
 class CashReceipts extends React.Component {
 
-    childrenMounted(item) {
-        this.refs.cashreceiptsContainer ?
-            (this.refs.cashreceiptsContainer.style.minHeight = item ? (
-                item.getElementsByClassName("cashReceipt_content")[0] ?
-                    (item.getElementsByClassName("cashReceipt_content")[0].getBoundingClientRect().height - 80) + "px" : "auto") : "auto") : null
-    }
-
     render() {
         const {form, cashReceipts, cashReceiptsUpdating, dispatch, error, children} = this.props;
         const onChange = data => dispatch({type: Change, data: data});
@@ -36,11 +29,11 @@ class CashReceipts extends React.Component {
         const onNextPage = () => dispatch({type: CashReceiptsRequestNextPage});
 
         return (
-            <div className="cashreceipts" ref="cashreceiptsContainer">
+            <div className="cashreceipts">
                 <h2 className="cashreceipts_title">Чеки</h2>
                 <div className="cashreceipts_searchType">
                     <span className="-active">Все чеки</span>
-                    <span><a href="#" className="link">Поиск по номеру</a></span>
+                    <span><a href="/CashReceipts/Number" className="link">Поиск по номеру</a></span>
                 </div>
                 <div className="cashreceipts_filters">
                     <div className="cashreceipts_filters_dates">
@@ -98,7 +91,7 @@ class CashReceipts extends React.Component {
                               onChange={(e, value) =>{ onChange({ isOnlyReturn: value }); onCashReceiptsRequestUpdate(); }}>Только чеки на возврат</Checkbox>
                 </div>
 
-                <div ref={::this.childrenMounted}>{children}</div>
+                {children}
 
                 { error ?
                     <div className="validation validation__error">{error}</div> :
@@ -120,7 +113,7 @@ class CashReceipts extends React.Component {
                                                 <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
                                                 {formatMoney(item.total, item.calculationType == "ReturnSell")}
                                                 <td>
-                                                    <Link to={`/CashReceipts/${item.fnSerialNumber}/${item.documentId}`}
+                                                    <Link to={`/CashReceipts/Common/${item.fnSerialNumber}/${item.documentId}`}
                                                           className="link">{item.number}</Link>
                                                     {item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell" ?
                                                         <span>Возврат</span> : null}

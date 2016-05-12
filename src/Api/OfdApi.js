@@ -89,6 +89,17 @@ export default class OfdApi {
         });
     }
 
+    async getCashreceiptsByNumber(number) {
+        if (number)
+        return await this.catchError(async () => {
+            var response = await axios.get(
+                this.prefix + "/v1/organizations/" +
+                this.organizationId + "/cashReceiptMetas/" +
+                number);
+            return response.data;
+        });
+    }
+
     async getCashReceipt(fnSerialNumber, cashReceiptId) {
         return await this.catchError(async () => {
             var response = await axios.get(
