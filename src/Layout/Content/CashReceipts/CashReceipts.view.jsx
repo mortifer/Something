@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 
 import "./cashreceipts.less";
@@ -21,6 +22,12 @@ function formatMoney(money, isReturn) {
 }
 
 class CashReceipts extends React.Component {
+
+    componentDidMount() {
+    }
+
+    componentDidUpdate() {
+    }
 
     render() {
         const {form, cashReceipts, cashReceiptsUpdating, dispatch, error, children} = this.props;
@@ -107,19 +114,22 @@ class CashReceipts extends React.Component {
                                             <td>№ чека</td>
                                         </tr>
                                         </thead>
+                                        <tbody className="tbody_padding"><td colSpan="3"></td></tbody>
                                         <tbody>
-                                        {cashReceipts.items.map((item, i) => (
-                                            <tr key={i}>
-                                                <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
-                                                {formatMoney(item.total, item.calculationType == "ReturnSell")}
-                                                <td>
-                                                    <Link to={`/CashReceipts/Common/${item.fnSerialNumber}/${item.documentId}`}
-                                                          className="link">{item.number}</Link>
-                                                    {item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell" ?
-                                                        <span>Возврат</span> : null}
-                                                </td>
-                                            </tr>
-                                        ))}
+                                        {cashReceipts.items.map((item, i) => {
+                                            const isActive = window.location.pathname.indexOf(`/CashReceipts/Common/${item.fnSerialNumber}/${item.documentId}`) !== -1;
+                                            const activeClassName = isActive ? "-active": "";
+                                            return (
+                                                <tr key={i} className={activeClassName}>
+                                                    <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
+                                                    {formatMoney(item.total, item.calculationType == "ReturnSell")}
+                                                    <td>
+                                                        <Link to={`/CashReceipts/Common/${item.fnSerialNumber}/${item.documentId}`} className="link" activeClassName="-active">{item.number}</Link>
+                                                        { item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell" ? <span>Возврат</span> : null }
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })}
                                         </tbody>
                                         <tfoot>
                                         <tr>

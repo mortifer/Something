@@ -10,17 +10,32 @@ function formatMoney(money) {
 }
 
 class CashReceiptsViewer extends React.Component {
+
     componentDidMount(){
     }
 
     componentDidUpdate() {
+        // const { cashReceipt } = this.props;
+        //
         if ( ReactDOM.findDOMNode(this).getElementsByClassName("cashReceipt_content").length ) {
-            ReactDOM.findDOMNode(this).parentNode.style.minHeight = (ReactDOM.findDOMNode(this).getElementsByClassName("cashReceipt_content")[0].getBoundingClientRect().height - 80) + "px"
+             ReactDOM.findDOMNode(this).parentNode.style.minHeight = (ReactDOM.findDOMNode(this).getElementsByClassName("cashReceipt_content")[0].getBoundingClientRect().height - 80) + "px"
         }
+        //
+        // const anchorLink = $("[href*='"+cashReceipt.fnSerialNumber+"/"+cashReceipt.documentId+"']");
+        // const anchorContainer = $(anchorLink).parents("table").parent()[0];
+        //
+        // if (anchorLink.length)
+        //     if (!$(anchorContainer).find(".cashreceipts_list_anchor").length) {
+        //         $(anchorContainer).append("<div class=\"cashreceipts_list_anchor\" />")[0];
+        //         $(anchorContainer).find(".cashreceipts_list_anchor").css({top: anchorLink.parents("tr").position().top + anchorLink.parents("tr").outerHeight(true)  })
+        //     }
+
+        //ReactDOM.findDOMNode(this).parentNode.getElementsByClassName("[href*='"+cashReceipt.fnSerialNumber+"/"+cashReceipt.documentId+"']").style.outline = "solid 1px #cc0000";
     }
 
-    componentWillUnmount() {
-         ReactDOM.findDOMNode(this).parentNode.style.minHeight = "auto";
+    componentWillUnmount(){
+        ReactDOM.findDOMNode(this).parentNode.style.minHeight = "auto";
+        //$(".cashreceipts_list_anchor").remove();
     }
 
     render() {

@@ -59,23 +59,29 @@ class CashReceiptsByNumber extends React.Component {
                                             <td>№ чека</td>
                                         </tr>
                                         </thead>
+                                        <tbody className="tbody_padding"><td colSpan="3"></td></tbody>
                                         <tbody>
-                                        {cashReceipts.map((item, i) => (
-                                            <tr key={i}>
-                                                <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
-                                                {formatMoney(item.total, item.calculationType == "ReturnSell")}
-                                                <td>
-                                                    <Link to={`/CashReceipts/Number/${item.fnSerialNumber}/${item.documentId}`}
-                                                          className="link">{item.number}</Link>
-                                                    {item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell" ?
-                                                        <span>Возврат</span> : null}
-                                                </td>
-                                            </tr>
-                                        ))}
+                                        {cashReceipts.map((item, i) => {
+                                            const isActive = window.location.pathname.indexOf(`/CashReceipts/Number/${item.fnSerialNumber}/${item.documentId}`) !== -1;
+                                            const activeClassName = isActive ? "-active": "";
+                                            return (
+                                                <tr key={i} className={activeClassName}>
+                                                    <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
+                                                    {formatMoney(item.total, item.calculationType == "ReturnSell")}
+                                                    <td>
+                                                        <Link
+                                                            to={`/CashReceipts/Number/${item.fnSerialNumber}/${item.documentId}`}
+                                                            className="link">{item.number}</Link>
+                                                        {item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell" ?
+                                                            <span>Возврат</span> : null}
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })}
                                         </tbody>
                                     </table>
                                 ) : (
-                                cashReceiptsUpdating ? null :
+                                cashReceiptsUpdating || form.number === "" ? null :
                                     <div className="cashreceipts_notFound">
                                         Не нашлось чеков с таким номером</div>
                             )

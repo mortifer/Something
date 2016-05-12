@@ -107,6 +107,7 @@ export default class OfdApi {
                 this.organizationId + "/cashReceipts/" +
                 fnSerialNumber + "/" +
                 cashReceiptId);
+            response.data.documentId = cashReceiptId;
             return response.data;
         });
     }
