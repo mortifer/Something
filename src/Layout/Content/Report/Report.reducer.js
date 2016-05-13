@@ -18,8 +18,8 @@ export default defineReducer(Map({ empty: true, data: undefined, runRefresh: fal
     .on(DataRetrievingError, 
         (state, { error }) => state.set("error", error).set("empty", true))
     .on(Enter, state => state.merge({ runRefresh: true }))
-    .on(Enter, perform(function*() { 
-        yield put({ type: Refresh }); 
+    .on(Enter, perform(function*() {
+        yield put({ type: Refresh });
     }))
     .on(Leave, state => state.merge({ runRefresh: false }))
     .on(Refresh, perform(function* () {
@@ -43,6 +43,9 @@ export default defineReducer(Map({ empty: true, data: undefined, runRefresh: fal
             yield put({ type: DataRetrievingError, error: e.toString() });
             yield call(() => delay(1000));
         }
-        if (yield select(x => x.get("runRefresh")))
-            yield put({ type: Refresh });
+        if (yield select(x => x.get("runRefresh"))) {
+            const organizationId = yield select(x => x.getIn(["layout", "organizationId"]));
+            if (organizationId && organizationId !== "")
+                yield put({type: Refresh});
+        }
     }));

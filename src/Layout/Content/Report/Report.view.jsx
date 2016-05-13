@@ -12,7 +12,7 @@ class Report extends React.Component {
         const { error, empty, model } = this.props
         if (empty) {
             if (error) {
-                return <div>Error: {error}</div>
+                return <div>{error}</div>
             }
             else {
                 return <div></div>

@@ -83,8 +83,10 @@ class App extends React.Component {
     render(){
         return (
             <Router history={browserHistory}>
+
                 <Route path="/" component={LayoutConnected}
                        onEnter={({ params }) => store.dispatch({ type: `${LayoutNamespace}.${Enter}`, organizationId: "" })} />
+
                 <Route path=":organizationId" component={LayoutConnected}
                        onEnter={({ params }) => store.dispatch({ type: `${LayoutNamespace}.${Enter}`, organizationId: params.organizationId || "" })} >
                     <IndexRoute component={Report}

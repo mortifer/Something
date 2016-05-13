@@ -161,7 +161,7 @@ class Header extends React.Component {
     }
     
     render(){
-        const { children } = this.props;
+        const { organizationId } = this.props.params;
 
         return (
             <div className="header">
@@ -185,7 +185,7 @@ class Header extends React.Component {
                         <div className="c-dropdown_content" data-for-dropdown-id="Settings">
                             <div class="c-dropdown_list">
                                 <a href="#" className="c-dropdown_list_item c-link">Организация</a>
-                                <Link to="/cashbox" className="c-dropdown_list_item c-link" activeClassName="-active">Кассы</Link>
+                                <Link to={"/" + organizationId + "/Cashbox" } className="c-dropdown_list_item c-link" activeClassName="-active">Кассы</Link>
                             </div>
                             <div className="c-dropdown_hr"></div>
                             <div className="c-dropdown_content_payment">

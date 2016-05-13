@@ -21,10 +21,19 @@ export default class OfdApi {
         }
     }
 
+    async verifyOrganizationId()  {
+        return await this.catchError(async () => {
+            var response = await axios.get(
+                this.prefix + "/v1/organizations/" +
+                this.organizationId + "/salesPoints");
+            return response.data;
+        });
+    }
+
     async getCashreceiptsStatistics(from, to)  {
         return await this.catchError(async () => {
             var response = await axios.get(
-                this.prefix + "/v1/organizations/" + 
+                this.prefix + "/v1/organizations/" +
                 this.organizationId + "/statistics/cashReceipt?from="+
                 (from.toISOString().split("T"))[0] +
                 "&to="+ (to.toISOString().split("T"))[0]);

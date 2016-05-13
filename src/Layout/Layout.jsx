@@ -7,33 +7,33 @@ import Content from "./Content";
 class Layout extends React.Component {
     render(){
 
-        const { children } = this.props;
+        const { children, error } = this.props;
         const organizationId = this.props.params.organizationId || "";
 
-        if (organizationId === "")
+        if (organizationId === "" || error)
             return (
                 <div className="c-wrapper">
                     <div className="middle">
                         <div className="content">
-                            выйди и снова зайди
+                            {error ? error: <div>выйди и снова зайди</div>}
                         </div>
                     </div>
                 </div>
             )
-        else
-            return (
-                <div>
-                    <Header />
-                    <div className="c-wrapper">
-                        <div className="middle">
-                            <Navigation {...this.props} />
-                            <Content>
-                                { children }
-                            </Content>
-                        </div>
+
+        return (
+            <div>
+                <Header {...this.props} />
+                <div className="c-wrapper">
+                    <div className="middle">
+                        <Navigation {...this.props} />
+                        <Content>
+                            { children }
+                        </Content>
                     </div>
                 </div>
-            )
+            </div>
+        )
     }
 }
 
