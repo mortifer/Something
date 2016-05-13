@@ -30,7 +30,8 @@ class CashReceipts extends React.Component {
     }
 
     render() {
-        const {form, cashReceipts, cashReceiptsUpdating, dispatch, error, children} = this.props;
+        const {form, cashReceipts, cashReceiptsUpdating, dispatch, error, children } = this.props;
+        const { organizationId } = this.props.params;
         const onChange = data => dispatch({type: Change, data: data});
         const onCashReceiptsRequestUpdate = () => dispatch({type: CashReceiptsRequestUpdate});
         const onNextPage = () => dispatch({type: CashReceiptsRequestNextPage});
@@ -40,7 +41,7 @@ class CashReceipts extends React.Component {
                 <h2 className="cashreceipts_title">Чеки</h2>
                 <div className="cashreceipts_searchType">
                     <span className="-active">Все чеки</span>
-                    <span><a href="/CashReceipts/Number" className="link">Поиск по номеру</a></span>
+                    <span><a href={ "/" + organizationId + "/CashReceipts/Number" } className="link">Поиск по номеру</a></span>
                 </div>
                 <div className="cashreceipts_filters">
                     <div className="cashreceipts_filters_dates">
@@ -114,7 +115,7 @@ class CashReceipts extends React.Component {
                                             <td>№ чека</td>
                                         </tr>
                                         </thead>
-                                        <tbody className="tbody_padding"><td colSpan="3"></td></tbody>
+                                        <tbody className="tbody_padding"><tr><td colSpan="3"></td></tr></tbody>
                                         <tbody>
                                         {cashReceipts.items.map((item, i) => {
                                             const isActive = window.location.pathname.indexOf(`/CashReceipts/Common/${item.fnSerialNumber}/${item.documentId}`) !== -1;
@@ -124,7 +125,7 @@ class CashReceipts extends React.Component {
                                                     <td>{new Date(item.timestamp).toLocaleString("ru-RU")}</td>
                                                     {formatMoney(item.total, item.calculationType == "ReturnSell")}
                                                     <td>
-                                                        <Link to={`/CashReceipts/Common/${item.fnSerialNumber}/${item.documentId}`} className="link" activeClassName="-active">{item.number}</Link>
+                                                        <Link to={`/${organizationId}/CashReceipts/Common/${item.fnSerialNumber}/${item.documentId}`} className="link" activeClassName="-active">{item.number}</Link>
                                                         { item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell" ? <span>Возврат</span> : null }
                                                     </td>
                                                 </tr>

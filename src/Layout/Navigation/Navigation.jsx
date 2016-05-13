@@ -28,15 +28,14 @@ class Navigation extends React.Component {
     }
 
     render(){
-        const { children } = this.props;
+        const { organizationId } = this.props.params;
 
         return (
             <div className="navigation">
                 <div className="navigation_list">
-                    <IndexLink to="/"  className="navigation_item navigation_item__report" activeClassName="-active">Главная</IndexLink>
-                    <Link to="/Statistics" className="navigation_item navigation_item__stat" activeClassName="-active">Статистика</Link>
-                    <Link to="/CashReceipts" className="navigation_item navigation_item__cashReceipts" activeClassName="-active">Чеки</Link>
-                    {/*<Link to="/cashbox" className="navigation_item navigation_item__cashbox" activeClassName="-active">Кассы</Link>*/}
+                    <IndexLink to={ "/" + organizationId }  className="navigation_item navigation_item__report" activeClassName="-active">Главная</IndexLink>
+                    <Link to={ "/" + organizationId + "/Statistics" } className="navigation_item navigation_item__stat" activeClassName="-active">Статистика</Link>
+                    <Link to={ "/" + organizationId + "/CashReceipts" } className="navigation_item navigation_item__cashReceipts" activeClassName="-active">Чеки</Link>
                 </div>
             </div>
         );

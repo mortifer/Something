@@ -1,9 +1,10 @@
-import { Map } from "immutable"
+import { Map, toJS } from "immutable"
 import { defineReducer } from "reelm/fluent"
-import { call } from "reelm/effects";
+import { call, select } from "reelm/effects";
 
 import OfdApi from "./Api/OfdApi";
 
+import layoutReducer from "./Layout/Layout.reducer";
 import reportReducer from "./Layout/Content/Report/Report.reducer";
 import statisticsReducer from "./Layout/Content/Statistics/Statistics.reducer";
 import SalesPointStatisticsReducer from "./Layout/Content/Statistics/SalesPoint/SalesPointStatistics.reducer";
@@ -11,6 +12,7 @@ import cashReceiptsReducer from "./Layout/Content/CashReceipts/CashReceipts.redu
 import cashReceiptsByNumberReducer from "./Layout/Content/CashReceipts/CashReceiptsByNumber.reducer";
 import cashReceiptViewerReducer from './Layout/Content/CashReceipts/CashReceiptViewer/CashReceiptViewer.reducer';
 
+export const Layout = "Layout";
 export const Report = "Report";
 export const Statistics = "Statistics";
 export const SalesPointStatistics = "SalesPointStatistics";
@@ -31,6 +33,7 @@ function getQueryVariable(variable) {
 }
 
 export default defineReducer(Map())
+.scopedOver(Layout, ["layout"], layoutReducer)
 .scopedOver(Report, ["report"], reportReducer)
 .scopedOver(Statistics, ["statistics"], statisticsReducer)
 .scopedOver(SalesPointStatistics, ["SalesPointStatistics"], SalesPointStatisticsReducer)
@@ -41,7 +44,8 @@ export default defineReducer(Map())
 .mapEffects(x => {
     if (x.type === "GetOfdApi") {
         return call(function* () {
-            return new OfdApi(window.apiURL, window.organizationId);
+            const organizationId = yield select(x => x.getIn(["layout", "organizationId"]));
+            return new OfdApi(window.apiURL, organizationId || "");
         });
     }
     if (x.type === "SaveState") {

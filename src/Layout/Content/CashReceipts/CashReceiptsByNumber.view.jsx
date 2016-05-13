@@ -19,7 +19,8 @@ function formatMoney(money, isReturn) {
 class CashReceiptsByNumber extends React.Component {
 
     render() {
-        const {form, cashReceipts, cashReceiptsUpdating, dispatch, error, children} = this.props;
+        const { form, cashReceipts, cashReceiptsUpdating, dispatch, error, children } = this.props;
+        const { organizationId } = this.props.params;
         const onChange = data => dispatch({type: Change, data: data});
         const onCashReceiptsRequestUpdate = () => dispatch({type: CashReceiptsRequestUpdate});
 
@@ -27,7 +28,7 @@ class CashReceiptsByNumber extends React.Component {
             <div className="cashreceipts">
                 <h2 className="cashreceipts_title">Чеки</h2>
                 <div className="cashreceipts_searchType">
-                    <span><a href="/CashReceipts/Common" className="link">Все чеки</a></span>
+                    <span><a href={ "/" + organizationId + "/CashReceipts/Common" } className="link">Все чеки</a></span>
                     <span className="-active">Поиск по номеру</span>
                 </div>
                 <div className="cashreceipts_filters">
@@ -59,7 +60,7 @@ class CashReceiptsByNumber extends React.Component {
                                             <td>№ чека</td>
                                         </tr>
                                         </thead>
-                                        <tbody className="tbody_padding"><td colSpan="3"></td></tbody>
+                                        <tbody className="tbody_padding"><tr><td colSpan="3"></td></tr></tbody>
                                         <tbody>
                                         {cashReceipts.map((item, i) => {
                                             const isActive = window.location.pathname.indexOf(`/CashReceipts/Number/${item.fnSerialNumber}/${item.documentId}`) !== -1;
@@ -70,7 +71,7 @@ class CashReceiptsByNumber extends React.Component {
                                                     {formatMoney(item.total, item.calculationType == "ReturnSell")}
                                                     <td>
                                                         <Link
-                                                            to={`/CashReceipts/Number/${item.fnSerialNumber}/${item.documentId}`}
+                                                            to={`/${organizationId}/CashReceipts/Number/${item.fnSerialNumber}/${item.documentId}`}
                                                             className="link">{item.number}</Link>
                                                         {item.calculationType == "ReturnBuy" || item.calculationType == "ReturnSell" ?
                                                             <span>Возврат</span> : null}

@@ -40,7 +40,8 @@ class CashReceiptsViewer extends React.Component {
 
     render() {
         const { cashReceipt, loading, backUrl, dispatch } = this.props;
-        const localBackUrl = "/CashReceipts/" + backUrl;
+        const { organizationId } = this.props.params;
+        const localBackUrl = "/" + organizationId + "/CashReceipts/" + backUrl;
 
         if (loading) {
             return <div></div>

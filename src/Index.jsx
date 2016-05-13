@@ -29,7 +29,8 @@ import { Provider } from "react-redux"
 import {compose, createStore} from "redux"
 import {reelmRunner} from "reelm";
 
-import { Enter, Leave } from "./Layout/Content/Report/Report.reducer";
+import { Enter } from "./Layout/Layout.reducer";
+import { Enter as ReportEnter, Leave as ReportLeave } from "./Layout/Content/Report/Report.reducer";
 import { Enter as StatisticsEnter, Leave as StatisticsLeave  } from "./Layout/Content/Statistics/Statistics.reducer";
 import { Enter as SalesPointStatisticsEnter, Leave as SalesPointStatisticsLeave  } from "./Layout/Content/Statistics/SalesPoint/SalesPointStatistics.reducer";
 import { Enter as CashReceiptsEnter, Leave as CashReceiptsLeave   } from "./Layout/Content/CashReceipts/CashReceipts.reducer";
@@ -37,6 +38,7 @@ import { Enter as CashReceiptsByNumberEnter, Leave as CashReceiptsByNumberLeave 
 import { Enter as CashReceiptViewerEnter } from "./Layout/Content/CashReceipts/CashReceiptViewer/CashReceiptViewer.reducer";
 
 import indexReducer, { 
+    Layout as LayoutNamespace, 
     Report as ReportNamespace, 
     Statistics as StatisticsNamespace, 
     SalesPointStatistics as SalesPointStatisticsNamespace ,
@@ -47,9 +49,10 @@ import indexReducer, {
 
 var store = createStore(indexReducer, compose(reelmRunner(), window.devToolsExtension ? window.devToolsExtension() : f => f));
 
-window.apiURLfake = "http://mp04lr1z.dev.kontur:3001";
-window.apiURL = "http://mp04lr1z.dev.kontur:11002";
-window.organizationId = "3C3DC287-E0B2-4142-A6B8-DE0F6CCD8DBE";
+const LayoutConnected = connect(
+    state => state.get("layout").toJS(),
+    dispatch => ({ dispatch: forwardTo(dispatch, LayoutNamespace) })
+)(Layout);
 
 const StatisticsConnected = connect(
     state => statisticsSelector(state.get("statistics")),
@@ -80,10 +83,13 @@ class App extends React.Component {
     render(){
         return (
             <Router history={browserHistory}>
-                <Route path="/" component={Layout}>
+                <Route path="/" component={LayoutConnected}
+                       onEnter={({ params }) => store.dispatch({ type: `${LayoutNamespace}.${Enter}`, organizationId: "" })} />
+                <Route path=":organizationId" component={LayoutConnected}
+                       onEnter={({ params }) => store.dispatch({ type: `${LayoutNamespace}.${Enter}`, organizationId: params.organizationId || "" })} >
                     <IndexRoute component={Report}
-                        onEnter={() => store.dispatch({ type: `${ReportNamespace}.${Enter}` })}
-                        onLeave={() => store.dispatch({ type: `${ReportNamespace}.${Leave}` })} />
+                        onEnter={() => store.dispatch({ type: `${ReportNamespace}.${ReportEnter}` })}
+                        onLeave={() => store.dispatch({ type: `${ReportNamespace}.${ReportLeave}` })} />
                     <Route path="Statistics">
                         <IndexRoute  component={StatisticsConnected}
                                      onEnter={() => store.dispatch({ type: `${StatisticsNamespace}.${StatisticsEnter}` })}
@@ -121,9 +127,10 @@ class App extends React.Component {
                             <Route path="Registration#fiscal-storage" component={FiscalStorage} />
                         </Route>
                     </Route>
-
-                    <Redirect from="*" to="/"/>
                 </Route>
+
+                <Redirect from="*" to="/" />
+
             </Router>
         );
     }

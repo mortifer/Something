@@ -7,27 +7,31 @@ import Graphs from "./Graphs/Graphs.view";
 import { connect } from "react-redux";
 import "./report.less";
 
-function Report({ error, empty, model }) {
-    if (empty) {
-        if (error) {
-            return <div>Error: {error}</div>
+class Report extends React.Component {
+    render(){
+        const { error, empty, model } = this.props
+        if (empty) {
+            if (error) {
+                return <div>Error: {error}</div>
+            }
+            else {
+                return <div></div>
+            }
         }
-        else {
-            return <div></div>
-        }            
-    }
 
-    return (
-        <div className="report">
-            <div className="report_left">
-                <Graphs model={model} />
+        return (
+            <div className="report">
+                <div className="report_left">
+                    <Graphs table={model.table} {...this.props} />
+                </div>
+                <div className="report_right">
+                    <Notifications notifications={model.notifications} />
+                    <Tasks tasks={model.tasks} />
+                </div>
             </div>
-            <div className="report_right">
-                <Notifications notifications={model.notifications} />
-                <Tasks tasks={model.tasks} />
-            </div>
-        </div>
-    );
+        );
+
+    }
 }
 
 export default connect(
